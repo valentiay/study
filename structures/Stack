@@ -1,0 +1,138 @@
+#include <iostream>
+
+//Stack v0.2.0
+template <typename T>
+class Stack{
+public:
+                                Stack();
+                                ~Stack();
+    void                        push(T val);
+    T                           pop();
+    T                           min();
+    T                           max();
+    int                         size();
+    T                           back();
+    void                        clear();
+    void                        pushNode(typename Stack::Node * tmp);
+    typename Stack::Node *      popNode();
+
+    struct  Node{
+        T       val;
+        T       min;
+        T       max;
+        Node *  next;
+    };
+
+private:
+    Node *  top_;
+    int     size_;
+};
+
+template <typename T>
+Stack<T>::Stack(){
+    top_ = NULL;
+    size_ = 0;
+}
+
+template <typename T>
+Stack<T>::~Stack(){
+    clear();
+}
+
+template <typename T>
+void Stack<T>::push(T val){
+    Node * tmp = new Node;
+    tmp->val = val;
+    tmp->next = top_;
+    top_ = tmp;
+    size_++;
+    if(size_ <= 1)
+        top_->min = val;
+    else if(top_->next->min > val)
+        top_->min = val;
+    else
+        top_->min = top_->next->min;
+    if(size_ <= 1)
+        top_->max = val;
+    else if(top_->next->max < val)
+        top_->max = val;
+    else
+        top_->max = top_->next->max;
+}
+
+template <typename T>
+T Stack<T>::pop(){
+    if(size_ == 0){
+        std::cerr << "Stack::pop() : Empty stack\n";
+    }
+    Node * tmp = top_;
+    top_ = top_->next;
+    size_--;
+    T val = tmp->val;
+    delete tmp;
+    return val;
+}
+
+template <typename T>
+T Stack<T>::min(){
+    return top_->min;
+}
+
+template <typename T>
+T Stack<T>::max(){
+    return top_->max;
+}
+
+template <typename T>
+int Stack<T>::size(){
+    return size_;
+}
+
+template <typename T>
+T Stack<T>::back(){
+    if(size_ == 0){
+        std::cerr << "Stack::back() : Empty stack\n";
+    }
+    return top_->val;
+}
+
+template <typename T>
+void Stack<T>::clear(){
+    while(size_ != 0){
+        Node * tmp = top_;
+        top_ = top_->next;
+        delete tmp;
+        size_--;
+    }
+    top_ = NULL;
+}
+
+template <typename T>
+void Stack<T>::pushNode(Node * tmp){
+    tmp->next = top_;
+    top_ = tmp;
+    size_++;
+    if(size_ <= 1)
+        top_->min = tmp->val;
+    else if(top_->next->min > tmp->val)
+        top_->min = tmp->val;
+    else
+        top_->min = top_->next->min;
+    if(size_ <= 1)
+        top_->max = tmp->val;
+    else if(top_->next->max < tmp->val)
+        top_->max = tmp->val;
+    else
+        top_->max = top_->next->max;
+}
+
+template <typename T>
+typename Stack<T>::Node * Stack<T>::popNode(){
+    if(size_ == 0){
+        std::cerr << "Stack::popNode() : Empty stack\n";
+    }
+    Node * tmp = top_;
+    top_ = top_->next;
+    size_--;
+    return tmp;
+}
