@@ -32,13 +32,6 @@ private:
 template <typename T>
 void popPush(Stack <T> & popFrom, Stack <T> & pushTo);
 
-int main(){
-    Stack <int> a,b;
-    a.push(5);
-    popPush(a, b);
-    std::cout << b.back();
-}
-
 template <typename T>
 Stack<T>::Stack(){
     top_ = NULL;
