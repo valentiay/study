@@ -1,6 +1,7 @@
 #include <iostream>
+#include <cstdio>
 
-//Stack v0.2.0
+//Stack v0.3.0
 template <typename T>
 class Stack{
 public:
@@ -13,9 +14,11 @@ public:
     int                         size();
     T                           back();
     void                        clear();
-    void                        pushNode(typename Stack::Node * tmp);
-    typename Stack::Node *      popNode();
 
+    template <typename Y>
+    friend void popPush (Stack <Y> & popFrom, Stack <Y> & pushTo);
+
+private:
     struct  Node{
         T       val;
         T       min;
@@ -23,20 +26,21 @@ public:
         Node *  next;
     };
 
-private:
     Node *  top_;
     int     size_;
 };
 
-
-//===================================================================
-
-//Queue(Stack) v0.2.0
 template <typename T>
-class Queue{
+void popPush(Stack <T> & popFrom, Stack <T> & pushTo);
+
+//=============================================================================
+
+//StackQueue v0.3.0
+template <typename T>
+class StackQueue{
 public:
-    Queue();
-    ~Queue();
+    StackQueue();
+    ~StackQueue();
     void    enqueue(T val);
     T       dequeue();
     T       front();
@@ -51,7 +55,11 @@ private:
     void        shift();
 };
 
-//==========================STACK====================================
+//=============================================================================
+
+
+
+//===========================STACK=============================================
 
 template <typename T>
 Stack<T>::Stack(){
@@ -133,63 +141,60 @@ void Stack<T>::clear(){
 }
 
 template <typename T>
-void Stack<T>::pushNode(Node * tmp){
-    tmp->next = top_;
-    top_ = tmp;
-    size_++;
-    if(size_ <= 1)
-        top_->min = tmp->val;
-    else if(top_->next->min > tmp->val)
-        top_->min = tmp->val;
-    else
-        top_->min = top_->next->min;
-    if(size_ <= 1)
-        top_->max = tmp->val;
-    else if(top_->next->max < tmp->val)
-        top_->max = tmp->val;
-    else
-        top_->max = top_->next->max;
-}
-
-template <typename T>
-typename Stack<T>::Node * Stack<T>::popNode(){
-    if(size_ == 0){
-        std::cerr << "Stack::popNode() : Empty stack\n";
+void popPush(Stack <T> & popFrom, Stack <T> & pushTo){
+    if(popFrom.size_ == 0){
+        std::cerr << "popPush() : Empty stack\n";
     }
-    Node * tmp = top_;
-    top_ = top_->next;
-    size_--;
-    return tmp;
+    typename Stack<T>::Node * tmp = popFrom.top_;
+    popFrom.top_ = popFrom.top_->next;
+    popFrom.size_--;
+
+    tmp->next = pushTo.top_;
+    pushTo.top_ = tmp;
+    pushTo.size_++;
+    if(pushTo.size_ <= 1)
+        pushTo.top_->min = pushTo.top_->val;
+    else if(pushTo.top_->next->min > pushTo.top_->val)
+        pushTo.top_->min = pushTo.top_->val;
+    else
+        pushTo.top_->min = pushTo.top_->next->min;
+    if(pushTo.size_ <= 1)
+        pushTo.top_->max = pushTo.top_->val;
+    else if(pushTo.top_->next->max < pushTo.top_->val)
+        pushTo.top_->max = pushTo.top_->val;
+    else
+        pushTo.top_->max = pushTo.top_->next->max;
 }
 
-//========================QUEUE======================================
+//===========================STACKQUEUE========================================
+
 template <typename T>
-Queue<T>::Queue(){
+StackQueue<T>::StackQueue(){
     size_ = 0;
 }
 
 template <typename T>
-Queue<T>::~Queue(){
+StackQueue<T>::~StackQueue(){
     clear();
 }
 
 template <typename T>
-void Queue<T>::enqueue(T val){
+void StackQueue<T>::enqueue(T val){
     stack1_.push(val);
     size_++;
 }
 
 template <typename T>
-void Queue<T>::shift(){
+void StackQueue<T>::shift(){
     while(stack1_.size()){
-        stack2_.pushNode(stack1_.popNode());
+        popPush(stack1_, stack2_);
     }
 }
 
 template <typename T>
-T Queue<T>::dequeue(){
+T StackQueue<T>::dequeue(){
     if(size_ == 0){
-        std::cerr << "Queue::dequeue : empty queue \n";
+        std::cerr << "StackQueue::dequeue : empty queue \n";
     }
     if(!stack2_.size())
         shift();
@@ -198,9 +203,9 @@ T Queue<T>::dequeue(){
 }
 
 template <typename T>
-T Queue<T>::front(){
+T StackQueue<T>::front(){
     if(size_ == 0){
-        std::cerr << "Queue::front : empty queue \n";
+        std::cerr << "StackQueue::front : empty queue \n";
     }
     if(!stack2_.size())
         shift();
@@ -208,19 +213,19 @@ T Queue<T>::front(){
 }
 
 template <typename T>
-int Queue<T>::size(){
+int StackQueue<T>::size(){
     return size_;
 }
 
 template <typename T>
-void Queue<T>::clear(){
+void StackQueue<T>::clear(){
     stack1_.clear();
     stack2_.clear();
     size_ = 0;
 }
 
 template <typename T>
-T Queue<T>::min(){
+T StackQueue<T>::min(){
     if(size_ == 0){
         std::cerr << "Queue::min : empty queue \n";
     }
