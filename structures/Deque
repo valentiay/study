@@ -1,5 +1,7 @@
 #include <iostream>
+#include <cstdio>
 
+//Deque v0.0.2
 template <typename T>
 class Deque{
 public:
@@ -25,10 +27,16 @@ private:
     int     size_;
 };
 
+//=============================================================================
+
+
+
+//===========================DEQUE=============================================
+
 template <typename T>
 Deque<T>::Deque(){
-    head_ = nullptr;
-    tail_ = nullptr;
+    head_ = NULL;
+    tail_ = NULL;
     size_ = 0;
 }
 
@@ -41,10 +49,10 @@ template <typename T>
 void Deque<T>::push_front(T val){
     Node * tmp = new Node;
     tmp -> val = val;
-    tmp -> next = nullptr;
+    tmp -> next = NULL;
     if(!size_){
         tail_ = tmp;
-        tmp -> prev = nullptr;
+        tmp -> prev = NULL;
     }
     else{
         head_ -> next = tmp;
@@ -58,10 +66,10 @@ template <typename T>
 void Deque<T>::push_back(T val){
     Node * tmp = new Node;
     tmp -> val = val;
-    tmp -> prev = nullptr;
+    tmp -> prev = NULL;
     if(!size_){
         head_ = tmp;
-        tmp -> next = nullptr;
+        tmp -> next = NULL;
     }
     else{
         tail_ -> prev = tmp;
@@ -75,13 +83,12 @@ template <typename T>
 T Deque<T>::pop_front(){
     if(!size_){
         std::cerr << "Deque::pop_front : Empty deque\n";
-        return NULL;
     }
     Node * tmp = head_;
     if(size_ == 1)
-        tail_ = nullptr;
+        tail_ = NULL;
     else
-        head_ -> prev -> next = nullptr;
+        head_ -> prev -> next = NULL;
     head_ = tmp -> prev;
     size_--;
     T val = tmp -> val;
@@ -93,13 +100,12 @@ template <typename T>
 T Deque<T>::pop_back(){
     if(!size_){
         std::cerr << "Deque::pop_back : Empty deque\n";
-        return NULL;
     }
     Node * tmp = tail_;
     if(size_ == 1)
-        head_ = nullptr;
+        head_ = NULL;
     else
-        tail_ -> next -> prev = nullptr;
+        tail_ -> next -> prev = NULL;
     tail_ = tmp -> next;
     size_--;
     T val = tmp -> val;
@@ -111,7 +117,6 @@ template <typename T>
 T Deque<T>::front(){
     if(!size_){
         std::cerr << "Deque::front : Empty deque\n";
-        return NULL;
     }
     return head_ -> val;
 }
@@ -120,7 +125,6 @@ template <typename T>
 T Deque<T>::back(){
     if(!size_){
         std::cerr << "Deque::back : Empty deque\n";
-        return NULL;
     }
     return tail_ -> val;
 }
