@@ -1,11 +1,11 @@
 #include <iostream>
 
-//Queue v0.0.1
+//Queue v0.0.2
 template <typename T>
 class Queue{
 public:
-    Queue();
-    ~Queue();
+            Queue();
+            ~Queue();
     void    enqueue(T val);
     T       dequeue();
     T       front();
@@ -15,8 +15,8 @@ public:
 private:
     struct Node{
         T       val;
-        Node *  next;
         Node *  prev;
+        Node *  next;
     };
     Node *  head_;
     Node *  tail_;
@@ -42,14 +42,14 @@ Queue<T>::~Queue(){
 template <typename T>
 void Queue<T>::enqueue(T val){
     Node * tmp = new Node;
-    tmp -> val = val;
-    tmp -> next = nullptr;
-    tmp -> prev = nullptr;
+    tmp->val = val;
+    tmp->prev = nullptr;
+    tmp->next = nullptr;
     if(size_ == 0)
         head_ = tmp;
     else
-        tail_ -> prev = tmp;
-    tmp -> next = tail_;
+        tail_->next = tmp;
+    tmp->prev = tail_;
     tail_ = tmp;
     size_++;
 }
@@ -61,14 +61,14 @@ T Queue<T>::dequeue(){
     }
     Node * tmp = head_;
     if(size_ != 1){
-        head_ = head_ -> prev;
-        head_ -> next = nullptr;
+        head_ = head_->next;
+        head_->prev = nullptr;
     }
     else{
         head_ = nullptr;
         tail_ = nullptr;
     }
-    T val = tmp -> val;
+    T val = tmp->val;
     size_--;
     delete tmp;
     return val;
@@ -79,7 +79,7 @@ T Queue<T>::front(){
     if(size_ == 0){
         std::cerr << "Queue::front : empty queue \n";
     }
-    return head_ -> val;
+    return head_->val;
 }
 
 template <typename T>
@@ -91,7 +91,7 @@ template <typename T>
 void Queue<T>::clear(){
     while(size_ != 0){
         Node * tmp = tail_;
-        tail_ = tail_ -> next;
+        tail_ = tail_->prev;
         delete tmp;
         size_--;
     }
