@@ -34,9 +34,6 @@ private:
 //===========================STACK=============================================
 
 template <typename T>
-void popPush(Stack <T> & popFrom, Stack <T> & pushTo);
-
-template <typename T>
 Stack<T>::Stack(){
     top_ = NULL;
     size_ = 0;
@@ -54,18 +51,14 @@ void Stack<T>::push(T val){
     tmp->next = top_;
     top_ = tmp;
     size_++;
-    if(size_ <= 1)
+    if(size_ <= 1){
         top_->min = val;
-    else if(top_->next->min > val)
-        top_->min = val;
-    else
-        top_->min = top_->next->min;
-    if(size_ <= 1)
         top_->max = val;
-    else if(top_->next->max < val)
-        top_->max = val;
-    else
-        top_->max = top_->next->max;
+    }
+    else{
+        top_->min = (top_->next->min > val)?val:top_->next->min;
+        top_->max = (top_->next->max < val)?val:top_->next->max;
+    }
 }
 
 template <typename T>
@@ -127,17 +120,12 @@ void popPush(Stack <T> & popFrom, Stack <T> & pushTo){
     tmp->next = pushTo.top_;
     pushTo.top_ = tmp;
     pushTo.size_++;
-    if(pushTo.size_ <= 1)
+    if(pushTo.size_ <= 1){
         pushTo.top_->min = pushTo.top_->val;
-    else if(pushTo.top_->next->min > pushTo.top_->val)
-        pushTo.top_->min = pushTo.top_->val;
-    else
-        pushTo.top_->min = pushTo.top_->next->min;
-    if(pushTo.size_ <= 1)
         pushTo.top_->max = pushTo.top_->val;
-    else if(pushTo.top_->next->max < pushTo.top_->val)
-        pushTo.top_->max = pushTo.top_->val;
-    else
-        pushTo.top_->max = pushTo.top_->next->max;
+    }
+    else{
+        pushTo.top_->min = (pushTo.top_->next->min > pushTo.top_->val)?pushTo.top_->val:pushTo.top_->next->min;
+        pushTo.top_->max = (pushTo.top_->next->max < pushTo.top_->val)?pushTo.top_->val:pushTo.top_->next->max;
+    }
 }
-
