@@ -1,14 +1,12 @@
 #include <iostream>
 
-//Heap v1.0.0
+//Heap v1.0.1
 template <typename T>
 class Heap{
 public:
     Heap();
     ~Heap();
     void        insert(T val);
-    T           extract_top();
-    T           get_top();
     int         size();
     void        clear();
     void        print();
@@ -16,6 +14,9 @@ public:
 protected:
     virtual void        siftUp(int index) = 0;
     virtual void        siftDown(int index) = 0;
+
+    T           extract_top();
+    T           get_top();
 
     T *         buffer_;
     int         defaultSize_;
