@@ -1,6 +1,6 @@
 #include <iostream>
 
-//Stack v0.3.1
+//Stack v0.3.2
 template <typename T>
 class Stack{
 public:
@@ -76,11 +76,15 @@ T Stack<T>::pop(){
 
 template <typename T>
 T Stack<T>::min(){
+    if(size_ == 0)
+        std::cerr << "Stack::min() : Empty stack\n";
     return top_->min;
 }
 
 template <typename T>
 T Stack<T>::max(){
+    if(size_ == 0)
+        std::cerr << "Stack::max() : Empty stack\n";
     return top_->max;
 }
 
