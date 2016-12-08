@@ -1,6 +1,6 @@
 #include <iostream>
 
-//Stack v0.3.0
+//Stack v0.3.1
 template <typename T>
 class Stack{
 public:
