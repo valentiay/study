@@ -2,12 +2,12 @@
 
 using std::cout;
 
-// Treap v0.0.1
+// Treap v0.1.0
 template <typename DataType, typename KeyType = DataType>
 class Treap{
 public:
-                Treap();
-                ~Treap();
+    Treap();
+    ~Treap();
 
     void        insert(KeyType key, DataType val);
     void        clear();
@@ -16,6 +16,10 @@ public:
     bool        deleteByKey(KeyType key);
 
     DataType *  find(KeyType key);
+
+    // insert function for situation, when KeyType == Datatype;
+
+    void        insert(DataType key);
 
 private:
     struct Node{
@@ -42,7 +46,7 @@ private:
 
 template <typename DataType, typename KeyType>
 Treap<DataType, KeyType>::Treap():
-    root_(NULL)
+        root_(NULL)
 {
     srand(time(NULL));
 }
@@ -131,6 +135,13 @@ DataType * Treap<DataType, KeyType>::find(KeyType key){
     if(node == NULL)
         return NULL;
     return &(node->val);
+}
+
+
+
+template <typename DataType, typename KeyType>
+void Treap<DataType, KeyType>::insert(DataType key){
+    insert(key, key);
 }
 
 // Private:
