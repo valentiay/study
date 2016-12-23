@@ -2,12 +2,12 @@
 
 using std::cout;
 
-//BST v0.1.0
+//BST v0.1.1
 template <typename T>
 class BST{
 public:
-            BST();
-            ~BST();
+    BST();
+    ~BST();
 
     void    insert(T val);
     void    clear();
@@ -41,7 +41,7 @@ private:
 
 template <typename T>
 BST<T>::BST():
-    root_(NULL)
+        root_(NULL)
 {}
 
 
@@ -99,14 +99,14 @@ bool BST<T>::deleteByKey(T key){
     Node * parent = NULL;
     while(key != node->val
           && (key < node->val && node->left != NULL
-          || key > node->val && node->right != NULL)){
+              || key > node->val && node->right != NULL)){
         parent = node;
         node = (key <= node->val)?(node->left):(node->right);
     }
     if(node->val != key)
         return false;
     if(node != root_)
-        deleteNode((parent->left == node)?(parent->left):(parent->right));
+        deleteNode((key <= parent->val)?(parent->left):(parent->right));
     else
         deleteNode(root_);
     return true;
@@ -142,7 +142,7 @@ T BST<T>::findMin(){
 // Private:
 
 template <typename T>
-void BST<T>::printRec(Node *node, int depth){
+void BST<T>::printRec(Node * node, int depth){
     if(node == NULL)
         return;
     printRec(node->right, depth + 1);
@@ -155,7 +155,7 @@ void BST<T>::printRec(Node *node, int depth){
 
 
 template <typename T>
-void BST<T>::clearRec(Node *node){
+void BST<T>::clearRec(Node * node){
     if(node == NULL)
         return;
     clearRec(node->left);
@@ -200,13 +200,8 @@ void BST<T>::deleteNode(Node * & node){
 template <typename T>
 typename BST<T>::Node * BST<T>::findNode(T key){
     Node * node = root_;
-    while(key != node->val
-          && (key < node->val && node->left != NULL
-              || key > node->val && node->right != NULL)){
+    while(node != NULL && node->val != key){
         node = (key <= node->val)?(node->left):(node->right);
     }
-    if(key == node->val)
-        return node;
-    else
-        return NULL;
+    return node;
 }
