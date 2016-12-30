@@ -2,7 +2,7 @@
 
 using std::cout;
 
-//BST v0.1.1
+//BST v0.1.2
 template <typename T>
 class BST{
 public:
@@ -185,9 +185,9 @@ void BST<T>::deleteNode(Node * & node){
             min = min->left;
         }
         if(min == node->right)
-            minParent->right = NULL;
+            minParent->right = min->right;
         else
-            minParent->left = NULL;
+            minParent->left = min->right;
         min->left = node->left;
         min->right = node->right;
         delete node;
