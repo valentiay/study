@@ -1,0 +1,53 @@
+#include <iostream>
+#include <iomanip>
+
+class dinMassive{
+private:
+    int* massive;
+    int length;
+public:
+    dinMassive(int size){
+        length = size;
+        massive = new int[size];
+        for(int i = 0; i < length; i++){
+            massive[i] = 0;
+        }
+    }
+    ~dinMassive(){
+        delete[] massive;
+    }
+    int len(){
+        return length;
+    }
+    void init(int index, int value){
+        if(index < length){
+            massive[index] = value;
+        }
+    }
+    int get(int index){
+        if(index < length){
+            return massive[index];
+        }
+        else{
+            std::cerr << "Wrong index";
+            return 0;
+        }
+    }
+    void print(){
+        for(int i = 0; i < length; i++){
+            std::cout << massive[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+    void insertionSort(){
+        for(int i = 1; i < length; i++) {
+            int x = massive[i];
+            int j = i - 1;
+            while (j >= 0 && x < massive[j]) {
+                massive[j + 1] = massive[j];
+                j--;
+            }
+            massive[j + 1] = x;
+        }
+    }
+};

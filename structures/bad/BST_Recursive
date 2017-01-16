@@ -1,0 +1,183 @@
+#include <iostream>
+
+using std::cerr;
+using std::cout;
+
+//BST v0.0.1
+template <typename T>
+class BST{
+public:
+            BST();
+            ~BST();
+
+    void    insert(T val);
+    void    clear();
+    void    print();
+
+    bool    deleteByKey(T key);
+    bool    find(T key);
+
+    T       findMin();
+    T       findMax();
+
+private:
+    struct Node{
+        Node *  left;
+        Node *  right;
+        T       val;
+    };
+
+    Node *  root_;
+
+    void    clearRec(Node *node);
+    void    insertRec(Node * & node, T val);
+    void    printRec(Node * node, int depth);
+    void    deleteNode(Node * & node);
+
+    bool    deleteByKeyRec(Node * & node, T key);
+
+    //Node &  findRec(Node );
+};
+
+/****************************MAIN*********************************************/
+
+int main(){
+    srand(time(NULL));
+    BST <int> bst;
+    for(int i = 0; i < 20; i++){
+         bst.insert(rand() % 100);
+    }
+    bst.print();
+    if(!bst.deleteByKey(9))
+        cerr << "wrong \n";
+    cout << '\n';
+    bst.print();
+}
+
+/****************************BST**********************************************/
+
+// Public:
+
+template <typename T>
+BST<T>::BST():
+    root_(NULL)
+{}
+
+
+
+template <typename T>
+BST<T>::~BST(){
+    clear();
+}
+
+
+
+template <typename T>
+void BST<T>::insert(T val){
+    insertRec(root_, val);
+}
+
+
+
+template <typename T>
+void BST<T>::clear(){
+    clearRec(root_);
+    root_ = NULL;
+}
+
+
+
+template <typename T>
+void BST<T>::print(){
+    printRec(root_, 0);
+}
+
+
+
+template <typename T>
+bool BST<T>::deleteByKey(T key){
+    return deleteByKeyRec(root_, key);
+}
+
+// Private:
+
+template <typename T>
+void BST<T>::insertRec(Node * & node, T val){
+    if(node == NULL){
+        node = new Node;
+        node->val = val;
+        node->left = NULL;
+        node->right = NULL;
+        return;
+    }
+    if(val <= node->val)
+        insertRec(node->left, val);
+    else
+        insertRec(node->right, val);
+}
+
+
+
+template <typename T>
+void BST<T>::printRec(Node *node, int depth){
+    if(node == NULL)
+        return;
+    printRec(node->right, depth + 1);
+    for(int i = 0; i < depth*3; i++)
+        cout << ' ';
+    cout << node->val << '\n';
+    printRec(node->left, depth + 1);
+}
+
+
+
+template <typename T>
+void BST<T>::clearRec(Node *node){
+    if(node == NULL)
+        return;
+    clearRec(node->left);
+    clearRec(node->right);
+    delete node;
+}
+
+
+
+template <typename T>
+bool BST<T>::deleteByKeyRec(Node * & node, T key){
+    if(node == NULL)
+        return false;
+    if(node->val == key){
+        deleteNode(node);
+        return true;
+    }
+    return deleteByKeyRec((node->val >= key)?(node->left):(node->right), key);
+}
+
+
+
+template <typename T>
+void BST<T>::deleteNode(Node * & node){
+    if(node->right == NULL){
+        Node * tmp = node->left;
+        delete node;
+        node = tmp;
+    }
+    else if(node->left == NULL){
+        Node * tmp = node->right;
+        delete node;
+        node = tmp;
+    }
+    else{
+        Node * minParent = node;
+        Node * min = node->right;
+        while(min->left != 0){
+            minParent = min;
+            min = min->left;
+        }
+        minParent->left = NULL;
+        min->left = node->left;
+        min->right = node->right;
+        delete node;
+        node = min;
+    }
+}

@@ -1,0 +1,26 @@
+int main(){
+    BST <int> a;
+    while(1){
+        char c;
+        int x;
+        cin >> c;
+        switch(c){
+            case '+':
+                cin >> x;
+                a.insert(x);
+                break;
+            case '-':
+                cin >> x;
+                a.deleteByKey(x);
+                break;
+            case '?':
+                cin >> x;
+                cout << a.find(x) << '\n';
+                break;
+            case 'x':
+                goto m;
+        }
+        a.print();
+    }
+    m:;
+}

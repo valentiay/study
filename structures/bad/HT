@@ -1,0 +1,203 @@
+#include <iostream>
+#include <cstring>
+
+using std::cin;
+using std::cout;
+
+// HashTable v0.0.1
+class HashTable{
+public:
+                HashTable();
+                ~HashTable();
+
+    bool        insert(char * key);
+    bool        contains(char * key);
+    bool        remove(char * key);
+
+    void        print();
+
+private:
+    struct Node{
+                Node(char * key);
+
+        void    changeKey(char * key);
+
+        char *  val;
+        bool    deleted;
+    };
+
+    void        rehash();
+
+    int         hash(char * key);
+
+    int         bufferSize_;
+    int         size_;
+    Node **      nodes_;
+};
+
+/****************************MAIN**********************************************/
+
+int main(){
+    HashTable a;
+    char * buff = new char[100000];
+    char c;
+    while(!cin.eof()){
+        cin >> c;
+        cin >> buff;
+        
+        // a.print();
+    }
+    delete[] buff;
+}
+
+/****************************HASHTABLE*****************************************/
+
+// Public:
+
+HashTable::HashTable():
+    bufferSize_(8),
+    size_(0)
+{
+    nodes_ = new Node*[bufferSize_];
+    for(int i = 0; i < bufferSize_; i++)
+        nodes_[i] = NULL;
+}
+
+
+
+HashTable::~HashTable(){
+    for(int i = 0; i < bufferSize_; i++)
+        if(nodes_[i] != NULL)
+            delete nodes_[i];
+    delete[] nodes_;
+}
+
+
+
+bool HashTable::insert(char * key){
+    if(contains(key))
+        return false;
+
+    if(3*bufferSize_ <= 4*(size_ + 1))
+        rehash();
+
+    int hashed = hash(key);
+    int i = 0;
+
+    while(i < bufferSize_){
+        if(nodes_[hashed] == NULL){
+            nodes_[hashed] = new Node(key);
+            size_++;
+            return true;
+        }
+        else if(nodes_[hashed]->deleted){
+            nodes_[hashed]->changeKey(key);
+            nodes_[hashed]->deleted = false;
+            size_++;
+            return true;
+        }
+        i++;
+        hashed = (hashed + i) % bufferSize_;
+    }
+    return false;
+}
+
+
+
+bool HashTable::contains(char * key){
+    int hashed = hash(key);
+    int i = 0;
+    while(nodes_[hashed] != NULL && i < bufferSize_){
+        if(!nodes_[hashed]->deleted && strcmp(nodes_[hashed]->val, key) == 0)
+            return true;
+        i++;
+        hashed = (hashed + i) % bufferSize_;
+    }
+    return false;
+}
+
+
+
+bool HashTable::remove(char * key){
+    if(!contains(key))
+        return false;
+
+    int hashed = hash(key);
+    int i = 0;
+
+    while(i < bufferSize_){
+        if(!nodes_[hashed]->deleted && strcmp(nodes_[hashed]->val, key) == 0){
+            nodes_[hashed]->deleted = true;
+            size_--;
+            return true;
+        }
+        i++;
+        hashed = (hashed + i) % bufferSize_;
+    }
+    return false;
+}
+
+
+
+void HashTable::print(){
+    cout << "Alfa: " << (double) size_ / bufferSize_
+         << "; Size: " << size_
+         << "; BufferSize: " << bufferSize_ << '\n';
+    for(int i = 0; i < bufferSize_; i++)
+        if(nodes_[i] == NULL)
+            cout << "NULL \n";
+        else
+            cout << "KEY: " << nodes_[i]->val
+                 << "; DELETED: " << nodes_[i]->deleted
+                 << "; ADDR: " << nodes_[i] << '\n';
+}
+
+// Private:
+
+void HashTable::rehash(){
+    Node ** tmp = nodes_;
+    bufferSize_ *= 2;
+    size_ = 0;
+    nodes_ = new Node*[bufferSize_];
+
+    for(int i = 0; i < bufferSize_; i++)
+        nodes_[i] = NULL;
+
+    for(int i = 0; i < bufferSize_ / 2; i++)
+        if(tmp[i] != NULL){
+            if(!tmp[i]->deleted)
+                insert(tmp[i]->val);
+            delete tmp[i];
+        }
+
+    delete[] tmp;
+}
+
+
+
+int HashTable::hash(char * key){
+    int hashed = 0;
+    int i = 0;
+    while(key[i] != 0){
+        hashed = (hashed + 5*key[i]) % bufferSize_;
+        i++;
+    }
+    return hashed;
+}
+
+/****************************HASHTABLE::NODE***********************************/
+
+HashTable::Node::Node(char * key):
+    deleted(false)
+{
+    val = new char[strlen(key) + 1];
+    strcpy(val, key);
+}
+
+
+
+void HashTable::Node::changeKey(char * key){
+    delete[] val;
+    val = new char[strlen(key) + 1];
+    strcpy(val, key);
+}
