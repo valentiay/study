@@ -2,39 +2,57 @@
 
 using std::cout;
 
-// Treap v0.1.0
+// Treap v1.0.0
 template <typename DataType, typename KeyType = DataType>
 class Treap{
 public:
+
     Treap();
+
     ~Treap();
 
-    void        insert(KeyType key, DataType val);
-    void        clear();
-    void        print();
 
-    bool        deleteByKey(KeyType key);
+    void        insert(KeyType key, DataType val);
+
+    bool        remove(KeyType key);
 
     DataType *  find(KeyType key);
 
-    // insert function for situation, when KeyType == Datatype;
+    void        clear();
+
+
+    void        print();
+
+
+    // Functions for case KeyType == Datatype;
 
     void        insert(DataType key);
 
 private:
+
     struct Node{
+
         KeyType     key;
+
         int         priority;
+
         DataType    val;
+
         Node *      left;
+
         Node *      right;
     };
+    
 
     void    split(Node * node, KeyType key, Node * & left, Node * & right);
-    void    clearRec(Node * node);
-    void    printRec(Node * node, int depth);
 
     Node *  merge(Node * left, Node * right);
+
+
+    void    clearRec(Node * node);
+
+    void    printRec(Node * node, int depth);
+
 
     Node *  root_;
 
@@ -46,7 +64,7 @@ private:
 
 template <typename DataType, typename KeyType>
 Treap<DataType, KeyType>::Treap():
-        root_(NULL)
+        root_(nullptr)
 {
     srand(time(NULL));
 }
@@ -63,18 +81,18 @@ Treap<DataType, KeyType>::~Treap(){
 template <typename DataType, typename KeyType>
 void Treap<DataType, KeyType>::insert(KeyType key, DataType val){
     int priority = rand();
-    Node * left = NULL;
-    Node * right = NULL;
+    Node * left = nullptr;
+    Node * right = nullptr;
     Node * tmp = new Node;
 
     Node * node = root_;
-    Node * nodeFather = NULL;
-    while (node != NULL && node->priority >= priority){
+    Node * nodeFather = nullptr;
+    while (node != nullptr && node->priority >= priority){
         nodeFather = node;
         node = (key <= node->key)?(node->left):(node->right);
     }
     split(node, key, left, right);
-    if(nodeFather == NULL)
+    if(nodeFather == nullptr)
         root_ = tmp;
     else if(key <= nodeFather->key)
         nodeFather->left = tmp;
@@ -105,17 +123,17 @@ void Treap<DataType, KeyType>::print(){
 
 
 template <typename DataType, typename KeyType>
-bool Treap<DataType, KeyType>::deleteByKey(KeyType key){
+bool Treap<DataType, KeyType>::remove(KeyType key){
     Node * node = root_;
-    Node * nodeFather = NULL;
-    while (node != NULL && node->key != key){
+    Node * nodeFather = nullptr;
+    while (node != nullptr && node->key != key){
         nodeFather = node;
         node = (key <= node->key)?(node->left):(node->right);
     }
-    if(node == NULL)
+    if(node == nullptr)
         return false;
     Node * tmp = node;
-    if(nodeFather == NULL)
+    if(nodeFather == nullptr)
         root_ = merge(node->left, node->right);
     else if(key <= nodeFather->key)
         nodeFather->left = merge(node->left, node->right);
@@ -130,10 +148,10 @@ bool Treap<DataType, KeyType>::deleteByKey(KeyType key){
 template <typename DataType, typename KeyType>
 DataType * Treap<DataType, KeyType>::find(KeyType key){
     Node * node = root_;
-    while (node != NULL && node->key != key)
+    while (node != nullptr && node->key != key)
         node = (key <= node->key)?(node->left):(node->right);
-    if(node == NULL)
-        return NULL;
+    if(node == nullptr)
+        return nullptr;
     return &(node->val);
 }
 
@@ -148,7 +166,7 @@ void Treap<DataType, KeyType>::insert(DataType key){
 
 template <typename DataType, typename KeyType>
 void Treap<DataType, KeyType>::clearRec(Node * node){
-    if(node == NULL)
+    if(node == nullptr)
         return;
     clearRec(node->left);
     clearRec(node->right);
@@ -159,7 +177,7 @@ void Treap<DataType, KeyType>::clearRec(Node * node){
 
 template <typename DataType, typename KeyType>
 void Treap<DataType, KeyType>::printRec(Node * node, int depth){
-    if(node == NULL)
+    if(node == nullptr)
         return;
     printRec(node->right, depth + 1);
     for(int i = 0; i < depth*3; i++)
@@ -173,9 +191,9 @@ void Treap<DataType, KeyType>::printRec(Node * node, int depth){
 template <typename DataType, typename KeyType>
 void Treap<DataType, KeyType>::split(Node * node, KeyType key,
                                      Node * & left, Node * & right){
-    if(node == NULL){
-        left = NULL;
-        right = NULL;
+    if(node == nullptr){
+        left = nullptr;
+        right = nullptr;
     }
     else if(node->key <= key){
         split(node->right, key, node->right, right);
@@ -192,7 +210,7 @@ void Treap<DataType, KeyType>::split(Node * node, KeyType key,
 template <typename DataType, typename KeyType>
 typename Treap<DataType, KeyType>::Node * Treap
         <DataType, KeyType>::merge(Node * left, Node * right){
-    if(left == NULL || right == NULL)
+    if(left == nullptr || right == nullptr)
         return (left == 0)?(right):(left);
     else if(left->priority > right->priority){
         left->right = merge(left->right, right);

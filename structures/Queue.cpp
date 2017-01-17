@@ -1,31 +1,48 @@
 #include <iostream>
 
-//Queue v0.0.2
+// Queue v0.0.3
 template <typename T>
 class Queue{
 public:
-            Queue();
-            ~Queue();
+    
+    Queue();
+    
+    ~Queue();
+    
+    
     void    enqueue(T val);
+    
     T       dequeue();
-    T       front();
-    int     size();
+
     void    clear();
+    
+    
+    T       front() const;
+    
+    int     size() const;
 
 private:
+    
     struct Node{
+        
         T       val;
+        
         Node *  prev;
+        
         Node *  next;
     };
+    
+    
     Node *  head_;
+    
     Node *  tail_;
+    
     int     size_;
 };
 
-//=============================================================================
+/******************************************************************************/
 
-//===========================QUEUE=============================================
+/****************************QUEUE*********************************************/
 
 template <typename T>
 Queue<T>::Queue(){
@@ -34,10 +51,14 @@ Queue<T>::Queue(){
     size_ = 0;
 }
 
+
+
 template <typename T>
 Queue<T>::~Queue(){
     clear();
 }
+
+
 
 template <typename T>
 void Queue<T>::enqueue(T val){
@@ -53,6 +74,8 @@ void Queue<T>::enqueue(T val){
     tail_ = tmp;
     size_++;
 }
+
+
 
 template <typename T>
 T Queue<T>::dequeue(){
@@ -74,18 +97,24 @@ T Queue<T>::dequeue(){
     return val;
 }
 
+
+
 template <typename T>
-T Queue<T>::front(){
+T Queue<T>::front() const{
     if(size_ == 0){
         std::cerr << "Queue::front : empty queue \n";
     }
     return head_->val;
 }
 
+
+
 template <typename T>
-int Queue<T>::size(){
+int Queue<T>::size() const{
     return size_;
 }
+
+
 
 template <typename T>
 void Queue<T>::clear(){

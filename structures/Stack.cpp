@@ -1,48 +1,72 @@
 #include <iostream>
 
-//Stack v0.3.2
+// Stack v0.3.3
 template <typename T>
 class Stack{
 public:
+
     Stack();
+
     ~Stack();
+
+
     void                        push(T val);
+
     T                           pop();
-    T                           min();
-    T                           max();
-    int                         size();
-    T                           back();
+
     void                        clear();
+
+
+    T                           back() const;
+
+    T                           min() const;
+
+    T                           max() const;
+
+
+    int                         size() const;
+
 
     template <typename Y>
     friend void popPush (Stack <Y> & popFrom, Stack <Y> & pushTo);
 
 private:
+
     struct  Node{
+
         T       val;
+
         T       min;
+
         T       max;
+
         Node *  next;
     };
 
     Node *  top_;
+
     int     size_;
+
 };
 
-//=============================================================================
+/******************************************************************************/
 
-//===========================STACK=============================================
+/****************************STACK*********************************************/
 
 template <typename T>
 Stack<T>::Stack(){
-    top_ = NULL;
+    top_ = nullptr;
     size_ = 0;
 }
+
+
 
 template <typename T>
 Stack<T>::~Stack(){
     clear();
 }
+
+
 
 template <typename T>
 void Stack<T>::push(T val){
@@ -61,6 +85,8 @@ void Stack<T>::push(T val){
     }
 }
 
+
+
 template <typename T>
 T Stack<T>::pop(){
     if(size_ == 0){
@@ -74,32 +100,42 @@ T Stack<T>::pop(){
     return val;
 }
 
+
+
 template <typename T>
-T Stack<T>::min(){
+T Stack<T>::min() const{
     if(size_ == 0)
         std::cerr << "Stack::min() : Empty stack\n";
     return top_->min;
 }
 
+
+
 template <typename T>
-T Stack<T>::max(){
+T Stack<T>::max() const{
     if(size_ == 0)
         std::cerr << "Stack::max() : Empty stack\n";
     return top_->max;
 }
 
+
+
 template <typename T>
-int Stack<T>::size(){
+int Stack<T>::size() const{
     return size_;
 }
 
+
+
 template <typename T>
-T Stack<T>::back(){
+T Stack<T>::back() const{
     if(size_ == 0){
         std::cerr << "Stack::back() : Empty stack\n";
     }
     return top_->val;
 }
+
+
 
 template <typename T>
 void Stack<T>::clear(){
@@ -109,8 +145,10 @@ void Stack<T>::clear(){
         delete tmp;
         size_--;
     }
-    top_ = NULL;
+    top_ = nullptr;
 }
+
+
 
 template <typename T>
 void popPush(Stack <T> & popFrom, Stack <T> & pushTo){
@@ -129,7 +167,9 @@ void popPush(Stack <T> & popFrom, Stack <T> & pushTo){
         pushTo.top_->max = pushTo.top_->val;
     }
     else{
-        pushTo.top_->min = (pushTo.top_->next->min > pushTo.top_->val)?pushTo.top_->val:pushTo.top_->next->min;
-        pushTo.top_->max = (pushTo.top_->next->max < pushTo.top_->val)?pushTo.top_->val:pushTo.top_->next->max;
+        pushTo.top_->min = (pushTo.top_->next->min > pushTo.top_->val)
+                           ?pushTo.top_->val:pushTo.top_->next->min;
+        pushTo.top_->max = (pushTo.top_->next->max < pushTo.top_->val)
+                           ?pushTo.top_->val:pushTo.top_->next->max;
     }
 }
