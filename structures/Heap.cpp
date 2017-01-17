@@ -1,32 +1,48 @@
 #include <iostream>
 
-//Heap v1.0.1
+// Heap v1.1.1
 template <typename T>
 class Heap{
 public:
+
     Heap();
+
     ~Heap();
+
+
     void        insert(T val);
-    int         size();
+
     void        clear();
-    void        print();
+
+
+
+    int         size() const;
+
+    void        print() const;
 
 protected:
     virtual void        siftUp(int index) = 0;
+
     virtual void        siftDown(int index) = 0;
 
+
     T           extract_top();
-    T           get_top();
+
+    T           get_top() const;
+
 
     T *         buffer_;
+
     int         defaultSize_;
+
     int         bufferSize_;
+
     int         size_;
 };
 
-//=============================================================================
+/******************************************************************************/
 
-//===========================HEAP==============================================
+/****************************HEAP**********************************************/
 
 template <typename T>
 Heap<T>::Heap():
@@ -37,10 +53,14 @@ Heap<T>::Heap():
     buffer_ = new T[bufferSize_];
 }
 
+
+
 template <typename T>
 Heap<T>::~Heap(){
     delete[] buffer_;
 }
+
+
 
 template <typename T>
 void Heap<T>::insert(T val){
@@ -57,6 +77,8 @@ void Heap<T>::insert(T val){
     siftUp(size_ - 1);
 }
 
+
+
 template <typename T>
 T Heap<T>::extract_top(){
     if(!size_)
@@ -69,17 +91,23 @@ T Heap<T>::extract_top(){
     return min;
 }
 
+
+
 template <typename T>
-T Heap<T>::get_top(){
+T Heap<T>::get_top() const{
     if(!size_)
         std::cerr << "Heap::get_top : Empty heap\n";
     return buffer_[0];
 }
 
+
+
 template <typename T>
-int Heap<T>::size(){
+int Heap<T>::size() const{
     return size_;
 }
+
+
 
 template <typename T>
 void Heap<T>::clear(){
@@ -89,8 +117,10 @@ void Heap<T>::clear(){
     size_ = 0;
 }
 
+
+
 template <typename T>
-void Heap<T>::print(){
+void Heap<T>::print() const{
     for(int i = 0; i < size_; i++)
         printf("%d ", buffer_[i]);
     printf("\n");

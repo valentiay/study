@@ -2,33 +2,52 @@
 
 using std::cout;
 
-// AVL v0.1.0
+// AVL v1.0.0
 template <typename DataType, typename KeyType = DataType>
 class AVL{
 public:
+    // Default constructor
     AVL();
+
+    // Destructor
     ~AVL();
 
-    void        insert(KeyType key, DataType val);
+
+    // Inserts (key, data) into the tree
+    void        insert(KeyType key, DataType data);
+
+    // Removes (key, data) from the tree. Returns false if failed
+    bool        remove(KeyType key);
+
+    // Deletes all elements
     void        clear();
-    void        print();
 
-    bool        deleteByKey(KeyType key);
-
-    DataType    kStat(int k);
-
+    // Returns pointer to Data field or NULL if failed
     DataType *  find(KeyType key);
 
-    // insert function for situation, when KeyType == DataType;
 
+    // Prints as a tree
+    void        print() const;
+
+    // Returns K-statistic for position
+    DataType    kStat(int k) const;
+
+
+    // Functions for case DataType == KeyType
+
+    // Inserts (key, data = key) into the tree
     void        insert(DataType key);
 
 private:
     struct Node{
-        Node(KeyType key, DataType val, Node * father);
+        // Constructs Node without children
+        Node(KeyType key, DataType data, Node * father);
 
-        int         bfactor();
+        // Fixes height, leftSize and rightSize values
         void        fix();
+
+        // Returns difference between left and right tree
+        int         bfactor() const;
 
         KeyType     key;
 
@@ -36,22 +55,33 @@ private:
         int         leftSize;
         int         rightSize;
 
-        DataType    val;
+        DataType    data;
 
         Node *      father;
         Node *      left;
         Node *      right;
     };
 
+    // Recursive function for clear
     void    clearRec(Node * node);
-    void    printRec(Node * node, int depth);
+
+    // Makes necessary rotation
     void    balance(Node * node);
+
     void    rotateRight(Node * node);
+
     void    rotateLeft(Node * node);
+
+    // Deletes Node by pointer
     void    deleteNode(Node * & node);
+
+    // Recursive function for print
+    void    printRec(Node * node, int depth) const;
 
     Node *  root_;
 };
+
+/******************************************************************************/
 
 /****************************AVL***********************************************/
 
@@ -59,7 +89,7 @@ private:
 
 template <typename DataType, typename KeyType>
 AVL<DataType, KeyType>::AVL():
-        root_(NULL)
+        root_(nullptr)
 {}
 
 
@@ -72,17 +102,17 @@ AVL<DataType, KeyType>::~AVL(){
 
 
 template <typename DataType, typename KeyType>
-void AVL<DataType, KeyType>::insert(KeyType key, DataType val){
+void AVL<DataType, KeyType>::insert(KeyType key, DataType data){
     Node * node = root_;
-    Node * nodeFather = NULL;
+    Node * nodeFather = nullptr;
 
-    while(node != NULL){
+    while(node != nullptr){
         nodeFather = node;
         node = (node->key > key)?(node->left):(node->right);
     }
 
-    Node * tmp = new Node(key, val, nodeFather);
-    if(nodeFather == NULL)
+    Node * tmp = new Node(key, data, nodeFather);
+    if(nodeFather == nullptr)
         root_ = tmp;
     else if(nodeFather->key > key)
         nodeFather->left = tmp;
@@ -90,7 +120,7 @@ void AVL<DataType, KeyType>::insert(KeyType key, DataType val){
         nodeFather->right = tmp;
 
     node = nodeFather;
-    while(node != NULL){
+    while(node != nullptr){
         balance(node);
         node = node->father;
     }
@@ -107,26 +137,26 @@ void AVL<DataType, KeyType>::clear(){
 
 
 template <typename DataType, typename KeyType>
-void AVL<DataType, KeyType>::print(){
+void AVL<DataType, KeyType>::print() const{
     printRec(root_, 0);
 }
 
 
 
 template <typename DataType, typename KeyType>
-bool AVL<DataType, KeyType>::deleteByKey(KeyType key){
+bool AVL<DataType, KeyType>::remove(KeyType key){
     Node * node = root_;
-    Node * nodeFather = NULL;
+    Node * nodeFather = nullptr;
 
-    while(node->key != key && node != NULL){
+    while(node->key != key && node != nullptr){
         nodeFather = node;
         node = (key < node->key)?(node->left):(node->right);
     }
 
-    if(node == NULL)
+    if(node == nullptr)
         return false;
 
-    if(nodeFather == NULL)
+    if(nodeFather == nullptr)
         deleteNode(root_);
     else if(key < nodeFather->key)
         deleteNode(nodeFather->left);
@@ -134,7 +164,7 @@ bool AVL<DataType, KeyType>::deleteByKey(KeyType key){
         deleteNode(nodeFather->right);
 
     node = nodeFather;
-    while(node != NULL){
+    while(node != nullptr){
         balance(node);
         node = node->father;
     }
@@ -145,7 +175,7 @@ bool AVL<DataType, KeyType>::deleteByKey(KeyType key){
 
 
 template <typename DataType, typename KeyType>
-DataType AVL<DataType, KeyType>::kStat(int k){
+DataType AVL<DataType, KeyType>::kStat(int k) const{
     Node * node = root_;
     while(k != node->leftSize){
         if(node->leftSize < k){
@@ -155,7 +185,7 @@ DataType AVL<DataType, KeyType>::kStat(int k){
         else
             node = node->left;
     }
-    return node->val;
+    return node->data;
 }
 
 
@@ -163,11 +193,11 @@ DataType AVL<DataType, KeyType>::kStat(int k){
 template <typename DataType, typename KeyType>
 DataType * AVL<DataType, KeyType>::find(KeyType key){
     Node * node = root_;
-    while (node != NULL && node->key != key)
+    while (node != nullptr && node->key != key)
         node = (key < node->key)?(node->left):(node->right);
-    if(node == NULL)
+    if(node == nullptr)
         return NULL;
-    return &(node->val);
+    return &(node->data);
 }
 
 
@@ -181,7 +211,7 @@ void AVL<DataType, KeyType>::insert(DataType key){
 
 template <typename DataType, typename KeyType>
 void AVL<DataType, KeyType>::clearRec(Node * node){
-    if(node == NULL)
+    if(node == nullptr)
         return;
     clearRec(node->left);
     clearRec(node->right);
@@ -191,13 +221,13 @@ void AVL<DataType, KeyType>::clearRec(Node * node){
 
 
 template <typename DataType, typename KeyType>
-void AVL<DataType, KeyType>::printRec(Node * node, int depth){
-    if(node == NULL)
+void AVL<DataType, KeyType>::printRec(Node * node, int depth) const{
+    if(node == nullptr)
         return;
     printRec(node->right, depth + 1);
     for(int i = 0; i < depth*3; i++)
         cout << ' ';
-    cout << node->val << "  F: " << node->father << "  T: " << node
+    cout << node->data << "  F: " << node->father << "  T: " << node
          <<"  L: " << node->leftSize << "  R: "
          << node->rightSize << "  H: " << node->height << "\n";
     printRec(node->left, depth + 1);
@@ -207,7 +237,7 @@ void AVL<DataType, KeyType>::printRec(Node * node, int depth){
 
 template <typename DataType, typename KeyType>
 void AVL<DataType, KeyType>::balance(Node * node){
-    if(node == NULL)
+    if(node == nullptr)
         return;
     node->fix();
     if(node->bfactor() == 2){
@@ -231,7 +261,7 @@ void AVL<DataType, KeyType>::rotateRight(Node * node){
     Node * b = node->left;
 
     b->father = a->father;
-    if(b->father == NULL)
+    if(b->father == nullptr)
         root_ = b;
     else if(b->father->left == a)
         b->father->left = b;
@@ -241,12 +271,12 @@ void AVL<DataType, KeyType>::rotateRight(Node * node){
     a->father = b;
     b->right = a;
 
-    if(C != NULL){
+    if(C != nullptr){
         C->father = a;
         a->left = C;
     }
     else
-        a->left = NULL;
+        a->left = nullptr;
 
     a->fix();
     b->fix();
@@ -261,7 +291,7 @@ void AVL<DataType, KeyType>::rotateLeft(Node * node){
     Node * a = node->right;
 
     a->father = b->father;
-    if(a->father == NULL)
+    if(a->father == nullptr)
         root_ = a;
     else if(a->father->left == b)
         a->father->left = a;
@@ -271,12 +301,12 @@ void AVL<DataType, KeyType>::rotateLeft(Node * node){
     b->father = a;
     a->left = b;
 
-    if(C != NULL){
+    if(C != nullptr){
         C->father = b;
         b->right = C;
     }
     else
-        b->right = NULL;
+        b->right = nullptr;
 
     b->fix();
     a->fix();
@@ -291,17 +321,17 @@ void AVL<DataType, KeyType>::deleteNode(Node * & node){
     Node * right = node->right;
     delete node;
 
-    if(left == NULL){
+    if(left == nullptr){
         node = right;
-        if(right != NULL) right->father = nodeFather;
+        if(right != nullptr) right->father = nodeFather;
     }
-    else if(right == NULL){
+    else if(right == nullptr){
         node = left;
         left->father = nodeFather;
     }
     else{
         Node * minNode = right;
-        while (minNode->left != NULL)
+        while (minNode->left != nullptr)
             minNode = minNode->left;
 
         if(right == minNode){
@@ -314,7 +344,7 @@ void AVL<DataType, KeyType>::deleteNode(Node * & node){
         else{
             node = minNode;
             node->father->left = node->right;
-            if(node->right != NULL)
+            if(node->right != nullptr)
                 node->right->father = node->father;
 
             minNode = node->father;
@@ -335,12 +365,12 @@ void AVL<DataType, KeyType>::deleteNode(Node * & node){
 /****************************AVL::NODE*****************************************/
 
 template <typename DataType, typename KeyType>
-AVL<DataType, KeyType>::Node::Node(KeyType key, DataType val, Node * father):
+AVL<DataType, KeyType>::Node::Node(KeyType key, DataType data, Node * father):
         key(key),
-        val(val),
+        data(data),
         father(father),
-        left(NULL),
-        right(NULL),
+        left(nullptr),
+        right(nullptr),
         height(1),
         rightSize(0),
         leftSize(0)
@@ -349,18 +379,18 @@ AVL<DataType, KeyType>::Node::Node(KeyType key, DataType val, Node * father):
 
 
 template <typename DataType, typename KeyType>
-int AVL<DataType, KeyType>::Node::bfactor(){
-    return ((right == NULL)?(0):(right->height)) -
-           ((left == NULL)?(0):(left->height));
+int AVL<DataType, KeyType>::Node::bfactor() const{
+    return ((right == nullptr)?(0):(right->height)) -
+           ((left == nullptr)?(0):(left->height));
 }
 
 
 
 template <typename DataType, typename KeyType>
 void AVL<DataType, KeyType>::Node::fix(){
-    int hl = (left == NULL)?(0):(left->height);
-    int hr = (right == NULL)?(0):(right->height);
+    int hl = (left == nullptr)?(0):(left->height);
+    int hr = (right == nullptr)?(0):(right->height);
     height = ((hl > hr)?(hl):(hr)) + 1;
-    leftSize = (left == NULL)?(0):(left->leftSize + left->rightSize + 1);
-    rightSize = (right == NULL)?(0):(right->leftSize + right->rightSize + 1);
+    leftSize = (left == nullptr)?(0):(left->leftSize + left->rightSize + 1);
+    rightSize = (right == nullptr)?(0):(right->leftSize + right->rightSize + 1);
 }
