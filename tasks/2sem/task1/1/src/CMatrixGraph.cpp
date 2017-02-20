@@ -45,6 +45,7 @@ int CMatrixGraph::VerticesCount() const{
 
 
 void CMatrixGraph::GetNextVertices(int vertex, vector<int> & vertices) const{
+    vertices.clear();
     for(int i = 0; i < verticesNumber_; i++)
         if(edges_[vertex][i])
             vertices.push_back(i);
@@ -53,6 +54,7 @@ void CMatrixGraph::GetNextVertices(int vertex, vector<int> & vertices) const{
 
 
 void CMatrixGraph::GetPrevVertices(int vertex, vector<int> & vertices) const{
+    vertices.clear();
     for(int i = 0; i < verticesNumber_; i++)
         if(edges_[i][vertex])
             vertices.push_back(i);

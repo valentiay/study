@@ -34,7 +34,9 @@ private:
 
     unsigned int                  verticesNumber_;
 
-    vector<unordered_set<int>>    sets_;
+    vector<unordered_set<int>>    out_;
+
+    vector<unordered_set<int>>    in_;
 
 };
 

@@ -6,14 +6,16 @@
 
 CSetGraph::CSetGraph(unsigned int verticesNumber):
     verticesNumber_(verticesNumber),
-    sets_(verticesNumber_)
+    out_(verticesNumber_),
+    in_(verticesNumber_)
 {}
 
 
 
 CSetGraph::CSetGraph(const IGraph * graph):
     verticesNumber_(graph->VerticesCount()),
-    sets_(verticesNumber_)
+    out_(verticesNumber_),
+    in_(verticesNumber_)
 {
     for(int i = 0; i < verticesNumber_; i++){
         vector<int> vertices;
@@ -25,27 +27,33 @@ CSetGraph::CSetGraph(const IGraph * graph):
 
 
 
-void CSetGraph::AddEdge(int from, int to){
-    sets_[from].insert(to);
+void CSetGraph::AddEdge(int from, int to)
+{
+    out_[from].insert(to);
+    in_[to].insert(from);
 }
 
 
 
-int CSetGraph::VerticesCount() const{
+int CSetGraph::VerticesCount() const
+{
     return verticesNumber_;
 }
 
 
 
-void CSetGraph::GetNextVertices(int vertex, vector<int> & vertices) const{
-    for(int i : sets_[vertex])
+void CSetGraph::GetNextVertices(int vertex, vector<int> & vertices) const
+{
+    vertices.clear();
+    for(int i : out_[vertex])
         vertices.push_back(i);
 }
 
 
 
-void CSetGraph::GetPrevVertices(int vertex, vector<int> & vertices) const{
-    for(int i = 0; i < verticesNumber_; i++)
-        if(sets_[i].find(vertex) != sets_[i].end())
-            vertices.push_back(i);
+void CSetGraph::GetPrevVertices(int vertex, vector<int> & vertices) const
+{
+    vertices.clear();
+    for(int i : in_[vertex])
+        vertices.push_back(i);
 }
