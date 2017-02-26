@@ -1,0 +1,165 @@
+#include <unordered_set>
+#include <vector>
+#include <list>
+#include <stack>
+
+/******************************************************************************/
+
+using std::unordered_set;
+using std::vector;
+using std::list;
+using std::stack;
+
+/******************************************************************************/
+
+class Graph{
+public:
+
+    Graph(unsigned int verticesNumber);
+
+    void addEdge(int from, int to);
+
+    int verticesCount() const;
+
+    void getNextVertices(int vertex, vector<int> & vertices) const;
+
+private:
+
+    unsigned int verticesNumber_;
+
+    vector<list<int>> out_;
+
+};
+
+/******************************************************************************/
+
+class LCSGetter{
+public:
+
+    list<list<int>> operator() (Graph * graph);
+
+private:
+
+    void DFS(int vertex);
+
+    int time_;
+
+    Graph * graph_;
+
+    stack<int> stack_;
+
+    list<list<int>> components_;
+
+    vector<bool> visited_;
+
+    vector<int> low_;
+
+};
+
+/****************************MAIN**********************************************/
+
+int main()
+{
+    unsigned int n = 0;
+    scanf("%d", &n);
+    Graph graph(n);
+
+    int k;
+    scanf("%d", &k);
+    for(int i = 0; i < k; i++){
+        int a, b;
+        scanf("%d%d", &a, &b);
+        graph.addEdge(a, b);
+    }
+
+    LCSGetter lcs;
+    list<list<int>> a = lcs(&graph);
+    for(const list<int> & i : a){
+        for(int j : i)
+            printf("%d ", j);
+        printf("\n");
+    }
+}
+
+/****************************GRAPH*********************************************/
+
+Graph::Graph(unsigned int verticesNumber):
+        verticesNumber_(verticesNumber),
+        out_(verticesNumber_)
+{}
+
+
+
+void Graph::addEdge(int from, int to){
+    // Checking if edge already exists
+    for(int i : out_[from])
+        if(i == to)
+            return;
+
+    out_[from].push_back(to);
+}
+
+
+
+int Graph::verticesCount() const{
+    return verticesNumber_;
+}
+
+
+
+void Graph::getNextVertices(int vertex, vector<int> & vertices) const{
+    vertices.clear();
+    for(int i : out_[vertex])
+        vertices.push_back(i);
+}
+
+/****************************LCSCOUNTER****************************************/
+
+list<list<int>> LCSGetter::operator()(Graph * graph)
+{
+    graph_ = graph;
+    visited_.assign(graph_->verticesCount(), false);
+    low_.reserve(graph_->verticesCount());
+    time_ = 0;
+
+    for(int i = 0; i < graph->verticesCount(); i++){
+        if(!visited_[i])
+            DFS(i);
+    }
+
+    return components_;
+}
+
+
+
+void LCSGetter::DFS(int vertex)
+{
+    low_[vertex] = time_++;
+    visited_[vertex] = true;
+    stack_.push(vertex);
+    bool isRoot = true;
+
+    vector<int> children;
+    graph_->getNextVertices(vertex, children);
+    for(int i : children){
+        if(!visited_[i])
+            DFS(i);
+        if(low_[i] < low_[vertex]){
+            low_[vertex] = low_[i];
+            isRoot = false;
+        }
+    }
+
+    if(isRoot){
+        list<int> component;
+        while(true){
+            int x = stack_.top();
+            stack_.pop();
+            component.push_back(x);
+            low_[x] = graph_->verticesCount() + 1;
+            if(vertex == x)
+                break;
+        }
+        components_.push_back(component);
+    }
+}
