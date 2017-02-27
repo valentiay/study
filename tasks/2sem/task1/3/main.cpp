@@ -58,7 +58,7 @@ int main()
     cin >> k;
     for(int i = 0; i < k; i++){
         int a, b;
-        scanf("%d%d", &a, &b);
+        cin >> a >> b;
         graph.addEdge(a, b);
     }
 

@@ -44,7 +44,7 @@ public:
     Graph operator() (Graph * graph);
 
 private:
-    // Tarjan algorithm. Finds LCS
+    // Tarjan algorithm. Finds SCC
     void DFS(int vertex);
 
     // Returns condensed graph
@@ -71,6 +71,7 @@ private:
 
 int main()
 {
+    /// Matrix O(V^2), List O(V + E), Set O(V + E), Arc O(V*E)
     unsigned int n = 0;
     cin >> n;
     Graph graph(n);
@@ -86,11 +87,14 @@ int main()
 
     Condenser lcs;
     // Condensed graph
+    /// Vc < V, Ec < E =>
+    /// Matrix O(V^2), List O(V + E), Set O(V + E), Arc O(V*E)
     Graph c = lcs(&graph);
 
     // Counting vertices without outgoing and ingoing edges
     int begs = 0;
     int ends = 0;
+    /// Matrix O(Vc^2), List O(Vc + Ec), Set O(Vc + Ec), Arc O(Vc*Ec)
     if(c.verticesCount() > 1)
         for(int i = 0; i < c.verticesCount(); i++){
             vector<int> ver;
@@ -163,6 +167,7 @@ Graph Condenser::operator()(Graph * graph)
     component_ = 0;
 
     // Tarjan algorithm
+    /// Matrix O(V^2), List O(V + E), Set O(V + E), Arc O(V*E)
     for(int i = 0; i < graph->verticesCount(); i++){
         if(!visited_[i])
             DFS(i);
@@ -181,7 +186,9 @@ void Condenser::DFS(int vertex)
     bool isRoot = true;
 
     vector<int> children;
+    /// Matrix O(V), List O(Ei), Set O(Ei), Arc O(E)
     graph_->getNextVertices(vertex, children);
+    /// O(1)
     for(int i : children){
         // Recursively launching Tarjan
         if(!visited_[i])
@@ -214,8 +221,10 @@ Graph Condenser::condense()
     // Visiting every edge
     // If edge connects different components adding it to condensed graph
     Graph condensed(component_);
+    /// Matrix O(Vc^2), List O(Vc + Ec),
     for(int v = 0; v < graph_->verticesCount(); v++){
         vector<int> vertices;
+        /// Matrix O(Vc), List O(Eic), Set O(Eic), Arc O(Ec)
         graph_->getNextVertices(v, vertices);
         for(int u : vertices)
             if(components_[u] != components_[v])
