@@ -1,0 +1,3 @@
+/home/valentiay/programming/cpp/tasks/2sem/task1/6/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/valentiay/programming/cpp/tasks/2sem/task1/6/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/valentiay/programming/cpp/tasks/2sem/task1/6/cmake-build-debug/CMakeFiles/6.dir
