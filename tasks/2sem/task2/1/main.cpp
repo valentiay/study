@@ -1,59 +1,44 @@
 #include <iostream>
 #include <vector>
-#include <list>
-#include <queue>
-#include <functional>
-
-#define INFINITY 2147483647
+#include <set>
 
 /******************************************************************************/
 
 using std::vector;
-using std::list;
-using std::priority_queue;
 using std::cin;
 using std::cout;
-using std::function;
+using std::set;
+using std::pair;
+using std::make_pair;
+
+const unsigned INFINITY = 4294967295;
 
 /******************************************************************************/
 
-class Graph{
+class Graph {
 public:
     Graph(unsigned verticesNumber);
 
-    void addEdge(int from, int to, int weight);
+    void addEdge(unsigned from, unsigned to, unsigned weight);
+
+    void getRelated(unsigned vertex, vector<unsigned> &vertices) const;
+
+    unsigned getWeight(unsigned v, unsigned u) const;
 
     unsigned getSize() const;
 
-    void getRelated(int vertex, vector<int> & vertices) const;
-
-    int getWeight(int v, int u) const;
-    
 private:
-
-    unsigned int size_;
-
-    vector<vector<int>> matr_;
+    unsigned size_;
+    vector<vector<unsigned>> matrix_;
 };
 
 /******************************************************************************/
 
-struct Path{
-    Path(int v, int len):
-            v(v),
-            len(len)
-    {}
-    int v;
-    int len;
-};
-
-void dijkstra(const Graph &graph, int from, vector<int> &lens){
-    // Initializing priority queue
-    function<bool(Path, Path)> compare = [](Path L, Path R)->bool{
-        return L.len > R.len;
-    };
-    priority_queue<Path, vector<Path>, function<bool(Path, Path)>> queue(compare);
-    queue.push(Path(from, 0));
+void dijkstra(const Graph &graph, unsigned from, vector<unsigned> &lens) {
+    // Initializing set which is used as priority queue.
+    // Pair stores <distance, vertex>
+    set<pair<unsigned, unsigned>> q;
+    q.insert(make_pair(0, from));
 
     // Initializing vector storing length of paths
     lens.clear();
@@ -64,20 +49,22 @@ void dijkstra(const Graph &graph, int from, vector<int> &lens){
     vector<bool> used(graph.getSize(), false);
 
     // Dijkstra algorithm
-    for(int i = 0; i < graph.getSize(); i++){
-        while(!queue.empty() && used[queue.top().v])
-            queue.pop();
-        if(queue.empty())
+    for (int i = 0; i < graph.getSize(); i++) {
+        // Stop searching if no reachable vertices left
+        if (q.empty())
             break;
-        int v = queue.top().v;
-        queue.pop();
+        // Extracting vertex from queue
+        unsigned v = q.begin()->second;
+        q.erase(q.begin());
         used[v] = true;
-        vector<int> vertices;
+        // Relaxing related vertices
+        vector<unsigned> vertices;
         graph.getRelated(v, vertices);
-        for(int u : vertices){
-            if(!used[u] && lens[v] + graph.getWeight(v, u) < lens[u]){
+        for (unsigned u : vertices) {
+            if (!used[u] && lens[v] + graph.getWeight(v, u) < lens[u]) {
+                q.erase(make_pair(lens[u], u));
                 lens[u] = lens[v] + graph.getWeight(v, u);
-                queue.push(Path(u, lens[u]));
+                q.insert(make_pair(lens[u], u));
             }
         }
     }
@@ -86,63 +73,58 @@ void dijkstra(const Graph &graph, int from, vector<int> &lens){
 /******************************************************************************/
 
 int main() {
+    // Initializing graph
     unsigned n = 0;
     unsigned m = 0;
     cin >> n >> m;
     Graph graph(n);
-    for(unsigned i = 0; i < m; i++){
-        int f = 0;
-        int t = 0;
-        int w = 0;
-        cin >> f >> t >> w;
-        graph.addEdge(f, t, w);
+    for (unsigned i = 0; i < m; i++) {
+        unsigned s = 0;
+        unsigned t = 0;
+        unsigned w = 0;
+        cin >> s >> t >> w;
+        graph.addEdge(s, t, w);
     }
     unsigned from = 0;
     unsigned to = 0;
     cin >> from >> to;
 
-    vector<int> lens;
+    vector<unsigned> lens;
     dijkstra(graph, from, lens);
 
-    if(lens[to] == INFINITY)
-        lens[to] = -1;
-    cout << lens[to];
+    if (lens[to] != INFINITY)
+        cout << (lens[to]);
+    else
+        cout << -1;
 
     return 0;
 }
 
 /****************************GRAPH*********************************************/
 
-Graph::Graph(unsigned int size):
+Graph::Graph(unsigned int size) :
         size_(size),
-        matr_(size_, vector<int>(size_, INFINITY))
-{}
+        matrix_(size_, vector<unsigned>(size_, INFINITY)) {}
 
 
-
-void Graph::addEdge(int from, int to, int weight)
-{
-    matr_[to][from] = matr_[from][to] = weight;
+void Graph::addEdge(unsigned from, unsigned to, unsigned weight) {
+    matrix_[to][from] = matrix_[from][to] = weight;
 }
 
 
-
-unsigned Graph::getSize() const
-{
+unsigned Graph::getSize() const {
     return size_;
 }
 
 
-
-void Graph::getRelated(int vertex, vector<int> & vertices) const
-{
+void Graph::getRelated(unsigned vertex, vector<unsigned> &vertices) const {
     vertices.clear();
-    for(int i = 0; i < size_; i++)
-        if(matr_[vertex][i] < INFINITY)
+    for (unsigned i = 0; i < size_; i++)
+        if (matrix_[vertex][i] < INFINITY)
             vertices.push_back(i);
 }
 
 
-int Graph::getWeight(int v, int u) const{
-    return matr_[v][u];
+unsigned Graph::getWeight(unsigned v, unsigned u) const {
+    return matrix_[v][u];
 }

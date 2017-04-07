@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/valentiay/programming/cpp/tasks/2sem/task2/3/main.cpp
+fstream
+-
+vector
+-
+assert.h
+-
+list
+-
+set
+-
+map
+-
+queue
+-
+
