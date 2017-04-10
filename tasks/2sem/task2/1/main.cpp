@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <list>
 
 /******************************************************************************/
 
@@ -10,69 +11,72 @@ using std::cout;
 using std::set;
 using std::pair;
 using std::make_pair;
+using std::list;
 
 const unsigned INFINITY = 4294967295;
 
+typedef pair<unsigned, unsigned> pair_uu;
+
 /******************************************************************************/
 
+// Undirected graph. List realization
 class Graph {
 public:
     Graph(unsigned verticesNumber);
 
     void addEdge(unsigned from, unsigned to, unsigned weight);
 
-    void getRelated(unsigned vertex, vector<unsigned> &vertices) const;
-
-    unsigned getWeight(unsigned v, unsigned u) const;
+    // Vertices - vector of pairs <vertex, weight>
+    void getRelated(unsigned vertex, vector<pair_uu> &vertices) const;
 
     unsigned getSize() const;
 
 private:
     unsigned size_;
-    vector<vector<unsigned>> matrix_;
+    vector<list<pair_uu>> edges_;
 };
 
 /******************************************************************************/
 
-void dijkstra(const Graph &graph, unsigned from, vector<unsigned> &lens) {
-    // Initializing set which is used as priority queue.
-    // Pair stores <distance, vertex>
-    set<pair<unsigned, unsigned>> q;
-    q.insert(make_pair(0, from));
-
-    // Initializing vector storing length of paths
-    lens.clear();
-    lens.assign(graph.getSize(), INFINITY);
-    lens[from] = 0;
-
-    // Initializing vector storing used vertices
+int dijkstra(Graph const &graph, int from, int to) {
+    // Stores true is [i] vertex was extracted from the queue
     vector<bool> used(graph.getSize(), false);
-
+    // Stores length of path to [i] vertex
+    vector<unsigned> path(graph.getSize(), INFINITY);
+    path[from] = 0;
+    // Priority queue
+    set<pair_uu> queue;
+    queue.emplace(make_pair(0, from));
     // Dijkstra algorithm
-    for (int i = 0; i < graph.getSize(); i++) {
-        // Stop searching if no reachable vertices left
-        if (q.empty())
-            break;
-        // Extracting vertex from queue
-        unsigned v = q.begin()->second;
-        q.erase(q.begin());
+    while (!queue.empty()) {
+        // Extracting vertex with minimal path
+        unsigned v = (queue.begin())->second;
+        queue.erase(queue.begin());
         used[v] = true;
-        // Relaxing related vertices
-        vector<unsigned> vertices;
-        graph.getRelated(v, vertices);
-        for (unsigned u : vertices) {
-            if (!used[u] && lens[v] + graph.getWeight(v, u) < lens[u]) {
-                q.erase(make_pair(lens[u], u));
-                lens[u] = lens[v] + graph.getWeight(v, u);
-                q.insert(make_pair(lens[u], u));
+
+        // Relaxing every related vertex
+        vector<pair_uu> paths;
+        graph.getRelated(v, paths);
+        for (pair_uu c : paths) {
+            if (path[c.first] > path[v] + c.second) {
+                // Remove old value from queue
+                if (path[c.first] != INFINITY)
+                    queue.erase(make_pair(path[c.first], c.first));
+                // Update path and insert it into queue
+                path[c.first] = path[v] + c.second;
+                queue.emplace(pair<int, int>(path[c.first], c.first));
             }
         }
     }
+
+    // Return distance to the target vertex or -1 if target is unreachable
+    return ((path[to] != INFINITY) ? (static_cast<int>(path[to])) : (-1));
 }
 
 /******************************************************************************/
 
 int main() {
+    std::ios::sync_with_stdio(false);
     // Initializing graph
     unsigned n = 0;
     unsigned m = 0;
@@ -89,13 +93,8 @@ int main() {
     unsigned to = 0;
     cin >> from >> to;
 
-    vector<unsigned> lens;
-    dijkstra(graph, from, lens);
-
-    if (lens[to] != INFINITY)
-        cout << (lens[to]);
-    else
-        cout << -1;
+    // Printing answer
+    cout << dijkstra(graph, from, to);
 
     return 0;
 }
@@ -104,27 +103,25 @@ int main() {
 
 Graph::Graph(unsigned int size) :
         size_(size),
-        matrix_(size_, vector<unsigned>(size_, INFINITY)) {}
+        edges_(size_, list<pair_uu>()) {}
 
 
-void Graph::addEdge(unsigned from, unsigned to, unsigned weight) {
-    matrix_[to][from] = matrix_[from][to] = weight;
+void Graph::addEdge(unsigned from, unsigned to, unsigned weight)
+{
+    edges_[from].push_back(make_pair(to, weight));
+    edges_[to].push_back(make_pair(from, weight));
 }
 
 
-unsigned Graph::getSize() const {
+unsigned Graph::getSize() const
+{
     return size_;
 }
 
 
-void Graph::getRelated(unsigned vertex, vector<unsigned> &vertices) const {
+void Graph::getRelated(unsigned vertex, vector<pair_uu> &vertices) const
+{
     vertices.clear();
-    for (unsigned i = 0; i < size_; i++)
-        if (matrix_[vertex][i] < INFINITY)
-            vertices.push_back(i);
-}
-
-
-unsigned Graph::getWeight(unsigned v, unsigned u) const {
-    return matrix_[v][u];
+    for (const pair_uu &i : edges_[vertex])
+        vertices.push_back(i);
 }

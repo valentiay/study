@@ -13,4 +13,10 @@ vector
 -
 set
 -
+fstream
+-
+queue
+-
+list
+-
 

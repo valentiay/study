@@ -1,0 +1,27 @@
+int main() {
+    // Initializing graph
+    unsigned n = 0;
+    unsigned m = 0;
+    cin >> n >> m;
+    Graph graph(n);
+    for (unsigned i = 0; i < m; i++) {
+        unsigned s = 0;
+        unsigned t = 0;
+        unsigned w = 0;
+        cin >> s >> t >> w;
+        graph.addEdge(s, t, w);
+    }
+    unsigned from = 0;
+    unsigned to = 0;
+    cin >> from >> to;
+
+    vector<unsigned> lens;
+    dijkstra(graph, from, lens);
+
+    if (lens[to] != INFINITY)
+        cout << (lens[to]);
+    else
+        cout << -1;
+
+    return 0;
+}
