@@ -1,19 +1,22 @@
-#include <iostream>
 #include <vector>
 #include <cassert>
+#include <fstream>
+#include <iostream>
+#include <queue>
 
 /******************************************************************************/
 
-using std::cin;
-using std::cout;
+using std::ifstream;
+using std::ofstream;
 using std::vector;
 using std::pair;
 using std::make_pair;
 using std::min;
+using std::queue;
 
 typedef pair<unsigned, unsigned> pair_uu;
 
-const unsigned INFINITY = 4294967295;
+const unsigned INFINITY = 2147483647;
 
 /******************************************************************************/
 
@@ -24,13 +27,9 @@ public:
     void increaseEdge(unsigned from, unsigned to, int weight);
 
     // Vertices - vector of pairs <vertex, weight>
-    void getNext(unsigned vertex, vector<pair_uu> &vertices) const;
-
-    unsigned getWeight(unsigned from, unsigned to) const;
+    void getRelated(unsigned vertex, vector<pair_uu> &vertices) const;
 
     unsigned getSize() const;
-
-    Graph & operator=(Graph other);
 
 private:
     unsigned size_;
@@ -39,85 +38,117 @@ private:
 
 /******************************************************************************/
 
+// Function object for counting maximal flow in network
 class MaxFlow{
 public:
-    unsigned operator()(const Graph &original, unsigned s, unsigned t) {
+    MaxFlow():
+            net_(0){}
+
+    // Returns maxiamal flow
+    unsigned operator()(const Graph & graph, unsigned s, unsigned t){
+        // Edmonds-Karp algorithm
+        // Residual network
+        net_ = graph;
+        // Target vertex
         t_ = t;
-        original_ = &original;
-        flows_ = new Graph(original.getSize());
+        // Delta in flow in current iteration
         unsigned delta = 0;
-        unsigned result = 0;
+        // Final flow
+        unsigned flow = 0;
+
+        // Increasing flow iteratively
         do{
-            used_.assign(original.getSize(), false);
-            delta = DFS(s, INFINITY);
-            result += delta;
-        }while(delta > 0);
-        delete flows_;
-        return result;
+            delta = IncreaseFlow(s);
+            flow += delta;
+        }while(delta != 0);
+
+        return flow;
     }
 
 private:
-    unsigned DFS(unsigned u, unsigned cMin){
-        if (u == t_)
-            return cMin;
-        used_[u] = true;
-        vector<pair_uu> next;
-        original_->getNext(u, next);
-        for(const pair_uu & v : next){
-            if(!used_[v.first] && flows_->getWeight(u, v.first) < original_->getWeight(u, v.first)) {
-                unsigned delta = DFS(v.first, min(cMin, original_->getWeight(u, v.first) - flows_->getWeight(u, v.first)));
-                if(delta > 0) {
-                    flows_->increaseEdge(u, v.first, delta);
-                    flows_->increaseEdge(v.first, u, -delta);
-                    return delta;
+    // Finds path and decreases throughput in residual network
+    unsigned IncreaseFlow(unsigned s){
+        // Stores pair <parent vertex, weight of edge from parent>
+        vector<pair_uu> parents(net_.getSize());
+        for(unsigned i = 0; i < net_.getSize(); i++){
+            parents[i].first = INFINITY;
+            parents[i].second = INFINITY;
+        }
+        parents[s].first = s;
+        parents[s].second = 0;
+
+        // Finding path with BFS
+        queue<unsigned> q;
+        q.emplace(s);
+        while(!q.empty()){
+            unsigned v = q.front();
+            q.pop();
+            if(v == t_)
+                break;
+            vector<pair_uu> related;
+            net_.getRelated(v, related);
+            for(pair_uu & edge : related){
+                if(parents[edge.first].first == INFINITY){
+                    parents[edge.first].first = v;
+                    parents[edge.first].second = edge.second;
+                    q.push(edge.first);
                 }
             }
         }
-        return 0;
-    }
-    const Graph * original_;
-    Graph * flows_;
-    vector<bool> used_;
-    int t_;
-};
 
-//int dfs(int u, int Cmin):         // Cmin — пропускная способность в текущем подпотоке
-//if (u = t)
-//return Cmin
-//        visited[u] = true
-//for (v in u.children)
-//int uv = edge(u, v)
-//if (not visited[v]) and (uv.f < uv.c)
-//int delta = dfs(v, min(Cmin, uv.c - uv.f))
-//if (delta > 0)
-//uv.f += delta
-//        uv.backEdge.f -= delta
-//return delta
-//return 0
+        // If target vertex isn't reachable delta is 0
+        if(parents[t_].first == INFINITY)
+            return 0;
+
+        // Finding minimal edge throughput
+        unsigned delta = INFINITY;
+        unsigned u = t_;
+        while(u != s){
+            if(parents[u].second < delta)
+                delta = parents[u].second;
+            u = parents[u].first;
+        }
+
+        // Decreasing throughputs in residual network
+        u = t_;
+        while(u != s){
+            net_.increaseEdge(parents[u].first, u, -delta);
+            net_.increaseEdge(u, parents[u].first, delta);
+            u = parents[u].first;
+        }
+
+        return delta;
+    }
+
+    unsigned t_;
+    Graph net_;
+};
 
 /******************************************************************************/
 
 int main() {
+    ifstream fin("maxflow.in");
+    ofstream fout("maxflow.out");
+
+    // Initializing graph
+    unsigned n = 0;
+    unsigned m = 0;
+    fin >> n >> m;
+    Graph graph(n);
+    for(int i = 0; i < m; i++){
+        unsigned v = 0;
+        unsigned u = 0;
+        unsigned w = 0;
+        fin >> v >> u >> w;
+        graph.increaseEdge(v - 1, u - 1, w);
+    }
+
+    // Counting maximal flow
     MaxFlow maxFlow;
-    do{
-        unsigned n = 0;
-        cin >> n;
-        if(n == 0)
-            break;
-        Graph graph(n);
-        unsigned s = 0;
-        unsigned t = 0;
-        unsigned c = 0;
-        cin >> s >> t >> c;
-        for(int i = 0; i < c; i++){
-            unsigned v = 0;
-            unsigned u = 0;
-            unsigned w = 0;
-            cin >> v >> u >> w;
-            graph.increaseEdge(v - 1, u - 1, w);
-        }
-        cout << maxFlow(graph, s, t);
-    }while(true);
+    fout << maxFlow(graph, 0, n - 1) << '\n';
+
+    fin.close();
+    fout.close();
 }
 
 /****************************GRAPH*********************************************/
@@ -127,11 +158,13 @@ Graph::Graph(unsigned int size) :
         matrix_(size_, vector<unsigned>(size_, 0)) {}
 
 
+
 void Graph::increaseEdge(unsigned from, unsigned to, int weight)
 {
-    assert(static_cast<int>(matrix_[from][to]) + weight > 0);
+    assert(static_cast<int>(matrix_[from][to]) + weight >= 0);
     matrix_[from][to] += weight;
 }
+
 
 
 unsigned Graph::getSize() const
@@ -140,25 +173,12 @@ unsigned Graph::getSize() const
 }
 
 
-unsigned Graph::getWeight(unsigned from, unsigned to) const
-{
-    return matrix_[from][to];
-}
 
-
-void Graph::getNext(unsigned vertex, vector<pair_uu> &vertices) const
+void Graph::getRelated(unsigned vertex, vector<pair_uu> &vertices) const
 {
     vertices.clear();
-    for(int i = 0; i < size_; i++){
+    for(unsigned i = 0; i < size_; i++){
         if(matrix_[vertex][i] != 0)
             vertices.push_back(make_pair(i, matrix_[vertex][i]));
     }
-}
-
-
-Graph& Graph::operator=(Graph other)
-{
-    size_ = other.size_;
-    matrix_ = other.matrix_;
-    return *this;
 }

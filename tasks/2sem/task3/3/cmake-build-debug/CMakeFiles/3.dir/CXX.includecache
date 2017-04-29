@@ -7,10 +7,14 @@
 #IncludeRegexTransform: 
 
 /home/valentiay/programming/cpp/tasks/2sem/task3/3/main.cpp
-iostream
--
 vector
 -
 cassert
+-
+fstream
+-
+iostream
+-
+queue
 -
 

@@ -1,6 +1,6 @@
-/home/valentiay/clion-2017.1/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/valentiay/programming/cpp/tasks/2sem/task3/1
--- The C compiler identification is GNU 5.4.0
--- The CXX compiler identification is GNU 5.4.0
+/home/valentiay/clion-2017.1.1/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/valentiay/programming/cpp/tasks/2sem/task3/1
+-- The C compiler identification is GNU 6.3.1
+-- The CXX compiler identification is GNU 6.3.1
 -- Check for working C compiler: /usr/bin/cc
 -- Check for working C compiler: /usr/bin/cc -- works
 -- Detecting C compiler ABI info
