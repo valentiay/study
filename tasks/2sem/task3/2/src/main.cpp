@@ -11,10 +11,11 @@
 
 
 int main() {
-    // Insert seeds to be tested here
+    // !!! Dots coordinates are integral, dispersion is 100 !!!
     vector<unsigned> seeds{42};
-    // Quantities of dots
-    vector<unsigned> quantities{13};
-
-    runTests(seeds, quantities, 2);
+    vector<unsigned> quantities{10};
+    cout << "Results for 10 points, 10 seeds:\n";
+    runTests(9, quantities);
+    cout << "\nResults for 2..12 points, 1 seed:\n";
+    runTests(seeds, 12);
 }

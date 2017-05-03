@@ -22,27 +22,43 @@ using std::move;
 
 // Container for test results
 struct TestResults{
-    TestResults(bool success, time_t time, double error);
+    TestResults(bool success,
+                time_t time,
+                double ansBF,
+                double ansMST,
+                double error);
 
     // True if test was passed
     bool success;
     // Time of testing in seconds
     time_t time;
-    // Error in percents
+    // Brute force answer
+    double ansBF;
+    // MST answer
+    double ansMST;
+    // Error
     double error;
 };
 
 // Runs test for every seed in seeds and every number of dots in ns
 // Criteria is maximal ratio of MST answer to BF answer
-TestResults && runTests(vector<unsigned> seeds,
-                        vector<unsigned> ns,
+TestResults && runTests(const vector<unsigned> & seeds,
+                        const vector<unsigned> & ns,
                         double criteria);
 
 // Runs test for every seed in [0..maxSeed]
 // and every number of dots im n [2..maxN]
-// Criteria is maximal ratio of MST answer to BF answer
+// Criteria is maximal permissible ratio of MST answer to BF answer
 TestResults && runTests(unsigned maxSeed = 100,
                         unsigned maxN = 10,
+                        double criteria = 2);
+
+TestResults && runTests(const vector<unsigned> & seeds,
+                        unsigned maxN,
+                        double criteria = 2);
+
+TestResults && runTests(unsigned maxSeed,
+                        const vector<unsigned> & ns,
                         double criteria = 2);
 
 // Runs test with specific seed and number of dots (n)

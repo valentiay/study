@@ -63,12 +63,6 @@ iomanip
 /home/valentiay/programming/cpp/tasks/2sem/task3/2/src/MST.cpp
 ../include/MST.h
 /home/valentiay/programming/cpp/tasks/2sem/task3/2/include/MST.h
-../include/graph.h
-/home/valentiay/programming/cpp/tasks/2sem/task3/2/include/graph.h
-queue
--
-set
--
 
 /home/valentiay/programming/cpp/tasks/2sem/task3/2/src/TSP_BF.cpp
 ../include/TSP_BF.h

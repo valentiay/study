@@ -1,269 +1,329 @@
-#include <fstream>
-#include <vector>
-#include <queue>
 #include <iostream>
-#include <cassert>
-
-using std::vector;
-using std::queue;
-using std::string;
-using std::cin;
-using std::cout;
-
-const int INF = 2147483647;
+#include <ctime>
+#include <vector>
+#include <map>
+#include <queue>
+#include <climits>
+#include <functional>
 
 /******************************************************************************/
 
-class Net{
-public:
-    Net() = default;
-    Net(unsigned size);
+// Structure stored in edges matrix
+struct Edge {
+    int capacity;
+    int flow;
+};
 
-    void setThroughput(unsigned s, unsigned t, int throughput);
-    void changeThroughput(unsigned s, unsigned t, int delta);
-    int getThroughput(unsigned s, unsigned t) const;
+// Is used for storing relation - question <-> vertex
+enum StringType {
+    None = -1, // Is not defined yet
+    Pattern, // Question in pattern
+    Str, // Question in str
+    Special // 1 or 0 vertex
+};
 
-    void changeFlow(unsigned s, unsigned t, int delta);
-    int getFlow(unsigned s, unsigned t) const;
+// Is used for storing relation vertex -> question
+struct VertexInfo {
+    StringType type;
+    int index;
+};
 
-    unsigned size() const;
+// Stores network used to find hamming distance
+struct Network {
+    Network();
 
-    void residualNet(Net & net);
+    // Increases capacity by 1 for edges from -> to and to -> from
+    void increaseCapacity(int from, int to);
 
-private:
-    unsigned size_;
-    vector<vector<int>> throughputs_;
-    vector<vector<int>> flows_;
+    // Matrix of edges
+    std::vector<std::vector<Edge>> matrix;
+
+    unsigned hammingDistance;
+    unsigned numberOfVertices;
+    unsigned source;
+    unsigned drain;
+
+    std::string pattern;
+    std::string str;
+
+    // Stores relation vertex->question
+    std::vector<std::vector<int>> vertexToQuestion;
+    // Stores relation question->vertex (0 for question in pattern, 1 for str)
+    std::vector<VertexInfo> questionToVertex;
 };
 
 /******************************************************************************/
 
-class FindMaxFlow{
-public:
-    unsigned operator()(Net &net, unsigned s_, unsigned t_){
-        s = s_;
-        t = t_;
-        n = net.size();
-        unsigned maxFlow = 0;
-        while (bfs(net)) {
-            p.clear();
-            p.assign(n, 0);
-            int flow = dfs(s, INF, net);
-            while (flow != 0) {
-                maxFlow += flow;
-                flow = dfs(s, INF, net);
-            }
-        }
-        return maxFlow;
-    }
+// Finds and sets maximal flow in network using Dinic's algorithm
+unsigned FindMaxFlow(Network& net);
 
-private:
-    bool bfs(Net &net){
-        d.clear();
-        d.assign(n, INF);
-        d[s] = 0;
-        queue<unsigned> q;
-        q.push(s);
-        while (!q.empty()) {
-            unsigned u = q.front();
-            q.pop();
-            for (unsigned v = 0; v < n; v++) {
-                if (net.getFlow(u, v) < net.getThroughput(u, v) &&
-                    d[v] == INF) {
-                    d[v] = d[u] + 1;
-                    q.push(v);
-                }
-            }
-        }
-        return d[t] != INF;
-    }
+// Used in FindMaxFlow. Finds shortest way from source tp each vertex in net
+// Returns true if drain is reachable from source.
+// Shortest ways are stored in distances vector
+bool FindMaxFlowBFS(Network& net, std::vector<int>& distances);
 
-
-    int dfs(unsigned u, int minC, Net &net){
-        if (u == t || minC == 0)
-            return minC;
-        for (unsigned v = p[u]; v < n; v++) {
-            if (d[v] == d[u] + 1) {
-                int delta = dfs(v, std::min(minC, net.getThroughput(u, v) -
-                                                  net.getFlow(u, v)), net);
-                if (delta != 0) {
-                    net.changeFlow(u, v, delta);
-                    net.changeFlow(v, u, -delta);
-                    return delta;
-                }
-            }
-            p[u]++;
-        }
-        return 0;
-    }
-    vector<unsigned> d;
-    vector<unsigned> p;
-    unsigned n;
-    unsigned s;
-    unsigned t;
-};
+// Used in FindMaxFlow. Finds Blocking flow in network.
+// Returns value of found flow
+// distances - shortest paths to every vertex from source
+// (v, p[v]) - first edge for v from which drain can be reached
+// v - current vertex
+// minC - max flow in complementary network
+int FindMaxFlowDFS(Network& net, std::vector<int>& distances, std::vector<int>& p, int v, int minC);
 
 /******************************************************************************/
 
-void BFS(const Net & net, unsigned s, vector<bool>& component){
-    component.assign(net.size(), false);
-    component[1] = true;
-    queue<unsigned> q;
-    q.push(s);
-    while(!q.empty()){
-        unsigned u = q.front();
-        q.pop();
-        for(unsigned v = 0; v < net.size(); v++){
-            if(net.getThroughput(u, v) > 0 && !component[v]){
-//                std::cout << v << '\n';
-                component[v] = true;
-                q.push(v);
-            }
-            if(net.getThroughput(v, u) > 0 && !component[v]){
-//                std::cout << v << '\n';
-                component[v] = true;
-                q.push(v);
-            }
-        }
-    }
-}
+// Returns minimal Hamming distance and fills str and pattern optimally
+unsigned hammingDistance(std::string& str, std::string& pattern);
+
+// Builds networ for finding Hamming distance
+void buildNetwork(Network &net);
+
+// Finds vertices reachable from zero vertex using dfs
+// and fills questions in str and pattern
+void FindZeros(Network &net, int v, std::vector<int> &visited);
 
 /******************************************************************************/
 
 int main()
 {
-    string str, temp;
-    cin >> str >> temp;
-
-    unsigned conflicts = 0;
-    Net net(str.length() + temp.length() + 2);
-    for (int i = 0; i < str.length() - temp.length() + 1; i++)
-        for (int j = 0; j < temp.length(); j++) {
-            if (str[i + j] == '?') {
-                if (temp[j] == '?') {
-                    net.changeThroughput(i + j + 2, str.length() + j + 2, 1);
-                    net.changeThroughput(str.length() + j + 2, i + j + 2, 1);
-                } else if (temp[j] == '0') {
-                    net.changeThroughput(i + j + 2, 0, 1);
-                    net.changeThroughput(0, i + j + 2, 1);
-                } else {
-                    net.changeThroughput(i + j + 2, 1, 1);
-                    net.changeThroughput(1, i + j + 2, 1);
-                }
-            } else if (temp[j] == '?') {
-                if (str[i + j] == '0') {
-                    net.changeThroughput(str.length() + j + 2, 0, 1);
-                    net.changeThroughput(0, str.length() + j + 2, 1);
-                } else {
-                    net.changeThroughput(str.length() + j + 2, 1, 1);
-                    net.changeThroughput(1, str.length() + j + 2, 1);
-                }
-            } else if (str[i + j] != temp[j]) {
-                conflicts++;
-            }
-        }
+    std::string pattern = "", str = "";
+    std::cin >> str;
+    std::cin >> pattern;
 
 
-    FindMaxFlow findMaxFlow;
-    cout << conflicts + findMaxFlow(net, 0, 1) << '\n';
+    std::cout << hammingDistance(str, pattern) << std::endl;
+    std::cout << str << std::endl;
+    std::cout << pattern << std::endl;
 
-    vector<bool> components;
-    Net res;
-    net.residualNet(res);
-    BFS(res, 1, components);
-
-    for (int i = 0; i < str.length(); i++) {
-        if (str[i] == '?') {
-            if (components[i + 2]) {
-                cout << 1;
-            } else {
-                cout << 0;
-            }
-        } else {
-            cout << str[i];
-        }
-    }
-    cout << '\n';
-    for (int i = 0; i < temp.length(); i++) {
-        if (temp[i] == '?') {
-            if (components[str.length() + i + 2]) {
-                cout << 1;
-            } else {
-                cout << 0;
-            }
-        } else {
-            cout << temp[i];
-        }
-    }
-
-//    fout << '\n';
-//
-//    for(int i = 0; i < res.size(); i++){
-//        for(int j = 0; j < res.size(); j++){
-//            fout << res.getThroughput(i, j);
-//        }
-//        fout << '\n';
-//    }
+    return 0;
 }
 
 /******************************************************************************/
 
-Net::Net(unsigned size):
-    size_(size),
-    throughputs_(size, vector<int>(size, 0)),
-    flows_(size, vector<int>(size, 0)){}
-
-
-
-void Net::setThroughput(unsigned s, unsigned t, int throughput)
+Network::Network() :
+        numberOfVertices(2),
+        source(0),
+        drain(1),
+        matrix(2007, std::vector<Edge>(2007, {0, 0})),
+        vertexToQuestion(2, std::vector<int>(2007, -1)),
+        questionToVertex(2007, {StringType::None, -1}),
+        pattern(""),
+        str("")
 {
-    throughputs_[s][t] = throughput;
+    questionToVertex[0] = {StringType::Special, 2};
+    questionToVertex[1] = {StringType::Special, 2};
 }
 
 
 
-void Net::changeThroughput(unsigned s, unsigned t, int delta)
+void Network::increaseCapacity(int from, int to)
 {
-    throughputs_[s][t] += delta;
+    matrix[from][to].capacity += 1;
+    matrix[to][from].capacity += 1;
+}
+
+/******************************************************************************/
+
+unsigned FindMaxFlow(Network& net)
+{
+    unsigned maxFlow = 0;
+    std::vector<int> distances(net.numberOfVertices);
+    std::vector<int> p(net.numberOfVertices);
+
+    // While drain is reachable increasing flow
+    while (FindMaxFlowBFS(net, distances)) {
+        // Initializing array of pointers (see FindMaxFlow DFS declaration)
+        for (int position = 0; position < net.numberOfVertices; position++)
+            p[position] = 0;
+
+        // Increasing flow
+        int currentFlow;
+        do {
+            currentFlow = FindMaxFlowDFS(net, distances, p, net.source, INT_MAX);
+            maxFlow += currentFlow;
+        } while (currentFlow != 0);
+    }
+
+    return maxFlow;
+}
+
+
+bool FindMaxFlowBFS(Network& net, std::vector<int>& distances)
+{
+    // Finding shortest paths from source to every vertex using BFS
+    for (int i = 0; i < net.numberOfVertices; i++)
+        distances[i] = -1;
+
+    std::queue<unsigned> verticesQueue;
+    verticesQueue.push(net.source);
+    distances[net.source] = 0;
+
+    while (!verticesQueue.empty()) {
+        unsigned v = verticesQueue.front();
+        verticesQueue.pop();
+
+        for (unsigned u = 0; u < net.numberOfVertices; u++) {
+            unsigned vertex = u;
+            if (distances[vertex] == -1 &&
+                net.matrix[v][u].flow < net.matrix[v][u].capacity) {
+                distances[vertex] = distances[v] + 1;
+                verticesQueue.push(vertex);
+            }
+        }
+    }
+
+    // Return true if drain is reachable
+    return (distances[net.drain] != -1);
 }
 
 
 
-int Net::getThroughput(unsigned s, unsigned t) const
+int FindMaxFlowDFS(Network& net, std::vector<int>& distances, std::vector<int>& p, int v, int minC)
 {
-    return throughputs_[s][t];
+    if (minC == 0 || v == net.drain)
+        return minC;
+
+    for (int u = p[v]; u < net.numberOfVertices; u++) {
+        p[v]++;
+
+        // If it is impossible to increase flow stop search in this direction
+        if (net.matrix[v][u].capacity <= net.matrix[v][u].flow)
+            continue;
+
+        // If u is related with v continue search
+        if (distances[u] == distances[v] + 1) {
+            int newMinC = std::min(minC, net.matrix[v][u].capacity - net.matrix[v][u].flow);
+            int delta = FindMaxFlowDFS(net, distances, p, u, newMinC);
+            if (delta > 0) {
+                // Increasing flow in found path
+                net.matrix[v][u].flow += delta;
+                net.matrix[u][v].flow -= delta;
+                return delta;
+            }
+        }
+    }
+
+    return 0;
+}
+
+/******************************************************************************/
+
+unsigned hammingDistance(std::string& str, std::string& pattern)
+{
+    // Initializing network
+    Network net;
+    net.hammingDistance = 0;
+    net.pattern = pattern;
+    net.str = str;
+    buildNetwork(net);
+
+    // Increase Hamming distance by maximal flow in built network and
+    // split graph into two pieces
+    net.hammingDistance += FindMaxFlow(net);
+
+    // Find vertices reachable from zero vertex in
+    // residual network and fill questions
+    std::vector<int> visited(net.numberOfVertices, 0);
+    FindZeros(net, 0, visited);
+    // Fill other questions with ones
+    for (int i = 0; i < net.pattern.length(); i++)
+        if (net.pattern[i] == '?')
+            net.pattern[i] = '1';
+    for (int i = 0; i < net.str.length(); i++)
+        if (net.str[i] == '?')
+            net.str[i] = '1';
+
+    str = net.str;
+    pattern = net.pattern;
+    return net.hammingDistance;
 }
 
 
 
-void Net::changeFlow(unsigned s, unsigned t, int delta)
+void FindZeros(Network& net, int v, std::vector<int>& visited)
 {
-    flows_[s][t] += delta;
+    // DFS
+    visited[v] = 1;
+
+    // Fill questions if vertex is reachable
+    if (net.questionToVertex[v].type == StringType::Pattern)
+        net.pattern[net.questionToVertex[v].index] = '0';
+    if (net.questionToVertex[v].type == StringType::Str)
+        net.str[net.questionToVertex[v].index] = '0';
+
+    // Launching search from other vertices
+    for (int u = 0; u < net.numberOfVertices; u++)
+        if (visited[u] == 0 &&
+            net.matrix[v][u].capacity > net.matrix[v][u].flow)
+            FindZeros(net, u, visited);
 }
 
 
 
-int Net::getFlow(unsigned s, unsigned t) const
+void buildNetwork(Network& net)
 {
-    return flows_[s][t];
-}
+    // Builds network for finding Hamming distance
+    // If 1 meets 0 -- Hamming distance is increased by 1
+    // If ? meets 1 -- capacity in edge <vertex for this ?> - <0> is increased by 1
+    // If ? meets 0 -- capacity in edge <vertex for this ?> - <0> is increased by 1
+    // If ? meets ? -- capacity in edge <vertex for first ?> - <vertex for second ?> is increased by 1
+    std::string &str = net.str;
+    std::string &patt = net.pattern;
+    int patternLength = (int) patt.length();
+    for (int strPos = 0; strPos < str.length() - patt.length() + 1; strPos++) {
+        for (int pattPos = 0; pattPos < patternLength; pattPos++) {
 
+            // 1 meets 0
+            if (patt[pattPos] == '1' && str[strPos + pattPos] == '0' ||
+                patt[pattPos] == '0' && str[strPos + pattPos] == '1') {
+                net.hammingDistance++;
+            }
 
+            // If there is no relation between this question and vertex, add this relation
+            if (patt[pattPos] == '?') {
+                if (net.vertexToQuestion[StringType::Pattern][pattPos] == -1) {
+                    net.numberOfVertices++;
+                    VertexInfo temp = {StringType::Pattern, pattPos};
+                    net.questionToVertex[net.numberOfVertices - 1] = temp;
+                    net.vertexToQuestion[StringType::Pattern][pattPos] = net.numberOfVertices - 1;
+                }
+            }
+            if (str[strPos + pattPos] == '?') {
+                if (net.vertexToQuestion[StringType::Str][strPos + pattPos] == -1) {
+                    net.numberOfVertices++;
+                    VertexInfo temp = {StringType::Str, strPos + pattPos};
+                    net.questionToVertex[net.numberOfVertices - 1] = temp;
+                    net.vertexToQuestion[StringType::Str][pattPos + strPos] = net.numberOfVertices - 1;
+                }
+            }
 
-unsigned Net::size() const
-{
-    return size_;
-}
-
-
-
-void Net::residualNet(Net & other)
-{
-    other.size_ = size_;
-    other.flows_.assign(size_, vector<int>(size_, 0));
-    other.throughputs_.assign(size_, vector<int>(size_, 0));
-    for(unsigned i = 0; i < size_; i++)
-        for(unsigned j = 0; j < size_; j++)
-            if(getFlow(i, j) >= 0)
-                other.setThroughput(i, j, getThroughput(i, j) - getFlow(i, j));
+            // Check and process all possible combinations
+            if (patt[pattPos] == '?') {
+                switch (str[strPos + pattPos]) {
+                    case '0':
+                        net.increaseCapacity(0, net.vertexToQuestion[StringType::Pattern][pattPos]);
+                        break;
+                    case '1':
+                        net.increaseCapacity(
+                                net.vertexToQuestion[StringType::Pattern][pattPos], 1);
+                        break;
+                    case '?':
+                        net.increaseCapacity(
+                                net.vertexToQuestion[StringType::Pattern][pattPos],
+                                net.vertexToQuestion[StringType::Str][strPos + pattPos]);
+                        break;
+                }
+            }
+            if (str[strPos + pattPos] == '?') {
+                switch (patt[pattPos]) {
+                    case '0':
+                        net.increaseCapacity(0, net.vertexToQuestion[StringType::Str][strPos + pattPos]);
+                        break;
+                    case '1':
+                        net.increaseCapacity(1, net.vertexToQuestion[StringType::Str][strPos + pattPos]);
+                        break;
+                }
+            }
+        }
+    }
 }

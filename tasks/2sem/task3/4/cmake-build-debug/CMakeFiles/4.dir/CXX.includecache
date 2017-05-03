@@ -7,14 +7,18 @@
 #IncludeRegexTransform: 
 
 /home/valentiay/programming/cpp/tasks/2sem/task3/4/main.cpp
-fstream
+iostream
+-
+ctime
 -
 vector
 -
+map
+-
 queue
 -
-iostream
+climits
 -
-cassert
+functional
 -
 

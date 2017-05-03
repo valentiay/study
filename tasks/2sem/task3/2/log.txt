@@ -1,0 +1,358 @@
+Results for 10 points, 100 seeds:
+[SUCCESS] BF Answer: 1013.73 <-> MST Answer: 1223.37
+[ 79% ]TIME: 0, ERR: 209.64 // SEED: 0, N: 10
+
+[SUCCESS] BF Answer: 1013.73 <-> MST Answer: 1223.37
+[ 79% ]TIME: 0, ERR: 209.64 // SEED: 1, N: 10
+
+[SUCCESS] BF Answer: 798.83 <-> MST Answer: 988.40
+[ 76% ]TIME: 0, ERR: 189.56 // SEED: 2, N: 10
+
+[SUCCESS] BF Answer: 894.14 <-> MST Answer: 967.31
+[ 91% ]TIME: 0, ERR: 73.17 // SEED: 3, N: 10
+
+[SUCCESS] BF Answer: 675.42 <-> MST Answer: 805.79
+[ 80% ]TIME: 0, ERR: 130.37 // SEED: 4, N: 10
+
+[SUCCESS] BF Answer: 1194.88 <-> MST Answer: 1521.42
+[ 72% ]TIME: 0, ERR: 326.54 // SEED: 5, N: 10
+
+[SUCCESS] BF Answer: 1031.34 <-> MST Answer: 1461.77
+[ 58% ]TIME: 1, ERR: 430.43 // SEED: 6, N: 10
+
+[SUCCESS] BF Answer: 802.36 <-> MST Answer: 892.15
+[ 88% ]TIME: 0, ERR: 89.79 // SEED: 7, N: 10
+
+[SUCCESS] BF Answer: 712.41 <-> MST Answer: 1004.24
+[ 59% ]TIME: 0, ERR: 291.82 // SEED: 8, N: 10
+
+[SUCCESS] BF Answer: 1220.36 <-> MST Answer: 1479.31
+[ 78% ]TIME: 0, ERR: 258.95 // SEED: 9, N: 10
+
+[SUCCESS] BF Answer: 798.15 <-> MST Answer: 913.02
+[ 85% ]TIME: 0, ERR: 114.86 // SEED: 10, N: 10
+
+[SUCCESS] BF Answer: 1014.81 <-> MST Answer: 1418.78
+[ 60% ]TIME: 0, ERR: 403.97 // SEED: 11, N: 10
+
+[SUCCESS] BF Answer: 1165.19 <-> MST Answer: 1323.17
+[ 86% ]TIME: 0, ERR: 157.98 // SEED: 12, N: 10
+
+[SUCCESS] BF Answer: 802.13 <-> MST Answer: 1085.29
+[ 64% ]TIME: 0, ERR: 283.16 // SEED: 13, N: 10
+
+[SUCCESS] BF Answer: 685.55 <-> MST Answer: 904.43
+[ 68% ]TIME: 1, ERR: 218.88 // SEED: 14, N: 10
+
+[SUCCESS] BF Answer: 1011.86 <-> MST Answer: 1113.25
+[ 89% ]TIME: 0, ERR: 101.39 // SEED: 15, N: 10
+
+[SUCCESS] BF Answer: 764.87 <-> MST Answer: 979.97
+[ 71% ]TIME: 0, ERR: 215.10 // SEED: 16, N: 10
+
+[SUCCESS] BF Answer: 905.31 <-> MST Answer: 1121.83
+[ 76% ]TIME: 0, ERR: 216.51 // SEED: 17, N: 10
+
+[SUCCESS] BF Answer: 682.56 <-> MST Answer: 901.36
+[ 67% ]TIME: 0, ERR: 218.80 // SEED: 18, N: 10
+
+[SUCCESS] BF Answer: 819.19 <-> MST Answer: 1041.25
+[ 72% ]TIME: 0, ERR: 222.06 // SEED: 19, N: 10
+
+[SUCCESS] BF Answer: 1045.09 <-> MST Answer: 1221.97
+[ 83% ]TIME: 0, ERR: 176.88 // SEED: 20, N: 10
+
+[SUCCESS] BF Answer: 1024.75 <-> MST Answer: 1311.40
+[ 72% ]TIME: 0, ERR: 286.66 // SEED: 21, N: 10
+
+[SUCCESS] BF Answer: 1194.48 <-> MST Answer: 1413.08
+[ 81% ]TIME: 0, ERR: 218.60 // SEED: 22, N: 10
+
+[SUCCESS] BF Answer: 803.34 <-> MST Answer: 1070.51
+[ 66% ]TIME: 1, ERR: 267.17 // SEED: 23, N: 10
+
+[SUCCESS] BF Answer: 1017.39 <-> MST Answer: 1326.32
+[ 69% ]TIME: 0, ERR: 308.94 // SEED: 24, N: 10
+
+[SUCCESS] BF Answer: 617.75 <-> MST Answer: 735.78
+[ 80% ]TIME: 0, ERR: 118.03 // SEED: 25, N: 10
+
+[SUCCESS] BF Answer: 1055.20 <-> MST Answer: 1337.38
+[ 73% ]TIME: 0, ERR: 282.19 // SEED: 26, N: 10
+
+[SUCCESS] BF Answer: 744.71 <-> MST Answer: 865.17
+[ 83% ]TIME: 0, ERR: 120.46 // SEED: 27, N: 10
+
+[SUCCESS] BF Answer: 868.33 <-> MST Answer: 1286.05
+[ 51% ]TIME: 0, ERR: 417.72 // SEED: 28, N: 10
+
+[SUCCESS] BF Answer: 704.96 <-> MST Answer: 866.41
+[ 77% ]TIME: 1, ERR: 161.45 // SEED: 29, N: 10
+
+[SUCCESS] BF Answer: 743.45 <-> MST Answer: 845.86
+[ 86% ]TIME: 0, ERR: 102.42 // SEED: 30, N: 10
+
+[SUCCESS] BF Answer: 1057.76 <-> MST Answer: 1263.32
+[ 80% ]TIME: 0, ERR: 205.56 // SEED: 31, N: 10
+
+[SUCCESS] BF Answer: 1110.92 <-> MST Answer: 1452.06
+[ 69% ]TIME: 0, ERR: 341.14 // SEED: 32, N: 10
+
+[SUCCESS] BF Answer: 949.34 <-> MST Answer: 1330.64
+[ 59% ]TIME: 0, ERR: 381.30 // SEED: 33, N: 10
+
+[SUCCESS] BF Answer: 1082.38 <-> MST Answer: 1286.05
+[ 81% ]TIME: 0, ERR: 203.67 // SEED: 34, N: 10
+
+[SUCCESS] BF Answer: 772.52 <-> MST Answer: 846.36
+[ 90% ]TIME: 0, ERR: 73.84 // SEED: 35, N: 10
+
+[SUCCESS] BF Answer: 1142.09 <-> MST Answer: 1460.19
+[ 72% ]TIME: 0, ERR: 318.10 // SEED: 36, N: 10
+
+[SUCCESS] BF Answer: 1293.39 <-> MST Answer: 1908.49
+[ 52% ]TIME: 0, ERR: 615.10 // SEED: 37, N: 10
+
+[SUCCESS] BF Answer: 1108.31 <-> MST Answer: 1400.68
+[ 73% ]TIME: 0, ERR: 292.37 // SEED: 38, N: 10
+
+[SUCCESS] BF Answer: 758.47 <-> MST Answer: 931.60
+[ 77% ]TIME: 1, ERR: 173.13 // SEED: 39, N: 10
+
+[SUCCESS] BF Answer: 866.40 <-> MST Answer: 951.62
+[ 90% ]TIME: 0, ERR: 85.22 // SEED: 40, N: 10
+
+[SUCCESS] BF Answer: 1149.98 <-> MST Answer: 1425.23
+[ 76% ]TIME: 0, ERR: 275.25 // SEED: 41, N: 10
+
+[SUCCESS] BF Answer: 1020.46 <-> MST Answer: 1354.04
+[ 67% ]TIME: 0, ERR: 333.57 // SEED: 42, N: 10
+
+[SUCCESS] BF Answer: 995.32 <-> MST Answer: 1399.02
+[ 59% ]TIME: 0, ERR: 403.70 // SEED: 43, N: 10
+
+[SUCCESS] BF Answer: 944.67 <-> MST Answer: 1198.66
+[ 73% ]TIME: 0, ERR: 253.99 // SEED: 44, N: 10
+
+[SUCCESS] BF Answer: 941.24 <-> MST Answer: 978.41
+[ 96% ]TIME: 0, ERR: 37.17 // SEED: 45, N: 10
+
+[SUCCESS] BF Answer: 1290.99 <-> MST Answer: 1634.23
+[ 73% ]TIME: 0, ERR: 343.24 // SEED: 46, N: 10
+
+[SUCCESS] BF Answer: 832.17 <-> MST Answer: 993.14
+[ 80% ]TIME: 0, ERR: 160.97 // SEED: 47, N: 10
+
+[SUCCESS] BF Answer: 1039.94 <-> MST Answer: 1223.99
+[ 82% ]TIME: 1, ERR: 184.06 // SEED: 48, N: 10
+
+[SUCCESS] BF Answer: 1037.95 <-> MST Answer: 1234.34
+[ 81% ]TIME: 0, ERR: 196.40 // SEED: 49, N: 10
+
+[SUCCESS] BF Answer: 888.40 <-> MST Answer: 1136.00
+[ 72% ]TIME: 0, ERR: 247.60 // SEED: 50, N: 10
+
+[SUCCESS] BF Answer: 893.84 <-> MST Answer: 1253.41
+[ 59% ]TIME: 0, ERR: 359.58 // SEED: 51, N: 10
+
+[SUCCESS] BF Answer: 1101.05 <-> MST Answer: 1260.79
+[ 85% ]TIME: 0, ERR: 159.75 // SEED: 52, N: 10
+
+[SUCCESS] BF Answer: 1058.20 <-> MST Answer: 1169.38
+[ 89% ]TIME: 0, ERR: 111.18 // SEED: 53, N: 10
+
+[SUCCESS] BF Answer: 1387.03 <-> MST Answer: 2111.02
+[ 47% ]TIME: 0, ERR: 723.99 // SEED: 54, N: 10
+
+[SUCCESS] BF Answer: 714.78 <-> MST Answer: 1054.03
+[ 52% ]TIME: 0, ERR: 339.25 // SEED: 55, N: 10
+
+[SUCCESS] BF Answer: 1397.40 <-> MST Answer: 1742.20
+[ 75% ]TIME: 0, ERR: 344.81 // SEED: 56, N: 10
+
+[SUCCESS] BF Answer: 861.80 <-> MST Answer: 1148.66
+[ 66% ]TIME: 0, ERR: 286.86 // SEED: 57, N: 10
+
+[SUCCESS] BF Answer: 969.99 <-> MST Answer: 1220.88
+[ 74% ]TIME: 1, ERR: 250.89 // SEED: 58, N: 10
+
+[SUCCESS] BF Answer: 1003.38 <-> MST Answer: 1366.44
+[ 63% ]TIME: 0, ERR: 363.05 // SEED: 59, N: 10
+
+[SUCCESS] BF Answer: 976.27 <-> MST Answer: 1230.49
+[ 73% ]TIME: 0, ERR: 254.22 // SEED: 60, N: 10
+
+[SUCCESS] BF Answer: 929.68 <-> MST Answer: 1068.00
+[ 85% ]TIME: 0, ERR: 138.32 // SEED: 61, N: 10
+
+[SUCCESS] BF Answer: 805.68 <-> MST Answer: 937.44
+[ 83% ]TIME: 0, ERR: 131.76 // SEED: 62, N: 10
+
+[SUCCESS] BF Answer: 945.85 <-> MST Answer: 1166.44
+[ 76% ]TIME: 0, ERR: 220.60 // SEED: 63, N: 10
+
+[SUCCESS] BF Answer: 987.46 <-> MST Answer: 1081.50
+[ 90% ]TIME: 0, ERR: 94.04 // SEED: 64, N: 10
+
+[SUCCESS] BF Answer: 954.85 <-> MST Answer: 1146.87
+[ 79% ]TIME: 0, ERR: 192.03 // SEED: 65, N: 10
+
+[SUCCESS] BF Answer: 709.11 <-> MST Answer: 893.97
+[ 73% ]TIME: 0, ERR: 184.86 // SEED: 66, N: 10
+
+[SUCCESS] BF Answer: 1131.67 <-> MST Answer: 1423.66
+[ 74% ]TIME: 1, ERR: 291.99 // SEED: 67, N: 10
+
+[SUCCESS] BF Answer: 1081.00 <-> MST Answer: 1378.02
+[ 72% ]TIME: 0, ERR: 297.01 // SEED: 68, N: 10
+
+[SUCCESS] BF Answer: 997.76 <-> MST Answer: 1375.50
+[ 62% ]TIME: 0, ERR: 377.74 // SEED: 69, N: 10
+
+[SUCCESS] BF Answer: 998.64 <-> MST Answer: 1356.62
+[ 64% ]TIME: 0, ERR: 357.98 // SEED: 70, N: 10
+
+[SUCCESS] BF Answer: 1025.58 <-> MST Answer: 1068.21
+[ 95% ]TIME: 0, ERR: 42.63 // SEED: 71, N: 10
+
+[SUCCESS] BF Answer: 1204.03 <-> MST Answer: 1422.28
+[ 81% ]TIME: 0, ERR: 218.26 // SEED: 72, N: 10
+
+[SUCCESS] BF Answer: 719.00 <-> MST Answer: 970.37
+[ 65% ]TIME: 0, ERR: 251.37 // SEED: 73, N: 10
+
+[SUCCESS] BF Answer: 716.73 <-> MST Answer: 941.22
+[ 68% ]TIME: 0, ERR: 224.49 // SEED: 74, N: 10
+
+[SUCCESS] BF Answer: 821.30 <-> MST Answer: 944.60
+[ 84% ]TIME: 0, ERR: 123.30 // SEED: 75, N: 10
+
+[SUCCESS] BF Answer: 1408.79 <-> MST Answer: 1806.93
+[ 71% ]TIME: 1, ERR: 398.14 // SEED: 76, N: 10
+
+[SUCCESS] BF Answer: 1046.65 <-> MST Answer: 1337.71
+[ 72% ]TIME: 0, ERR: 291.06 // SEED: 77, N: 10
+
+[SUCCESS] BF Answer: 747.99 <-> MST Answer: 940.53
+[ 74% ]TIME: 0, ERR: 192.53 // SEED: 78, N: 10
+
+[SUCCESS] BF Answer: 871.96 <-> MST Answer: 1110.19
+[ 72% ]TIME: 0, ERR: 238.23 // SEED: 79, N: 10
+
+[SUCCESS] BF Answer: 695.49 <-> MST Answer: 806.19
+[ 84% ]TIME: 0, ERR: 110.70 // SEED: 80, N: 10
+
+[SUCCESS] BF Answer: 980.92 <-> MST Answer: 1250.46
+[ 72% ]TIME: 0, ERR: 269.54 // SEED: 81, N: 10
+
+[SUCCESS] BF Answer: 1049.19 <-> MST Answer: 1176.25
+[ 87% ]TIME: 0, ERR: 127.05 // SEED: 82, N: 10
+
+[SUCCESS] BF Answer: 843.72 <-> MST Answer: 1115.23
+[ 67% ]TIME: 0, ERR: 271.52 // SEED: 83, N: 10
+
+[SUCCESS] BF Answer: 1128.93 <-> MST Answer: 1463.68
+[ 70% ]TIME: 0, ERR: 334.75 // SEED: 84, N: 10
+
+[SUCCESS] BF Answer: 807.72 <-> MST Answer: 920.09
+[ 86% ]TIME: 1, ERR: 112.37 // SEED: 85, N: 10
+
+[SUCCESS] BF Answer: 978.57 <-> MST Answer: 1236.68
+[ 73% ]TIME: 0, ERR: 258.11 // SEED: 86, N: 10
+
+[SUCCESS] BF Answer: 712.12 <-> MST Answer: 835.30
+[ 82% ]TIME: 0, ERR: 123.18 // SEED: 87, N: 10
+
+[SUCCESS] BF Answer: 763.34 <-> MST Answer: 870.66
+[ 85% ]TIME: 0, ERR: 107.31 // SEED: 88, N: 10
+
+[SUCCESS] BF Answer: 783.84 <-> MST Answer: 911.17
+[ 83% ]TIME: 0, ERR: 127.33 // SEED: 89, N: 10
+
+[SUCCESS] BF Answer: 973.74 <-> MST Answer: 1282.26
+[ 68% ]TIME: 0, ERR: 308.52 // SEED: 90, N: 10
+
+[SUCCESS] BF Answer: 672.20 <-> MST Answer: 766.09
+[ 86% ]TIME: 0, ERR: 93.89 // SEED: 91, N: 10
+
+[SUCCESS] BF Answer: 1000.25 <-> MST Answer: 1141.17
+[ 85% ]TIME: 0, ERR: 140.92 // SEED: 92, N: 10
+
+[SUCCESS] BF Answer: 796.66 <-> MST Answer: 1092.11
+[ 62% ]TIME: 0, ERR: 295.45 // SEED: 93, N: 10
+
+[SUCCESS] BF Answer: 1232.64 <-> MST Answer: 1376.84
+[ 88% ]TIME: 0, ERR: 144.20 // SEED: 94, N: 10
+
+[SUCCESS] BF Answer: 1158.97 <-> MST Answer: 1405.32
+[ 78% ]TIME: 1, ERR: 246.35 // SEED: 95, N: 10
+
+[SUCCESS] BF Answer: 739.62 <-> MST Answer: 1010.72
+[ 63% ]TIME: 0, ERR: 271.10 // SEED: 96, N: 10
+
+[SUCCESS] BF Answer: 1639.40 <-> MST Answer: 1969.63
+[ 79% ]TIME: 0, ERR: 330.23 // SEED: 97, N: 10
+
+[SUCCESS] BF Answer: 1044.73 <-> MST Answer: 1201.39
+[ 85% ]TIME: 0, ERR: 156.66 // SEED: 98, N: 10
+
+[SUCCESS] BF Answer: 975.80 <-> MST Answer: 1262.73
+[ 70% ]TIME: 0, ERR: 286.93 // SEED: 99, N: 10
+
+============Testing summary============
+=      100               tests passed =
+=        0               tests failed =
+=      100                tests total =
+=       12                   ttl time =
+=    0.120                   avg time =
+=  955.543              AVG BF answer =
+= 1190.788             AVG MST answer =
+=    1.534         Standard deviation =
+=    0.015   Normalized st. deviation =
+----------Testing  successful----------
+
+Results for 2..12 points, 1 seed:
+[SUCCESS] BF Answer: 306.46 <-> MST Answer: 306.46
+[ 100% ]TIME: 0, ERR: 0.00 // SEED: 42, N: 2
+
+[SUCCESS] BF Answer: 409.03 <-> MST Answer: 409.03
+[ 100% ]TIME: 0, ERR: 0.00 // SEED: 42, N: 3
+
+[SUCCESS] BF Answer: 423.55 <-> MST Answer: 425.09
+[ 99% ]TIME: 0, ERR: 1.54 // SEED: 42, N: 4
+
+[SUCCESS] BF Answer: 734.39 <-> MST Answer: 750.99
+[ 97% ]TIME: 0, ERR: 16.60 // SEED: 42, N: 5
+
+[SUCCESS] BF Answer: 733.94 <-> MST Answer: 860.66
+[ 82% ]TIME: 0, ERR: 126.72 // SEED: 42, N: 6
+
+[SUCCESS] BF Answer: 754.21 <-> MST Answer: 812.85
+[ 92% ]TIME: 0, ERR: 58.63 // SEED: 42, N: 7
+
+[SUCCESS] BF Answer: 982.71 <-> MST Answer: 1089.05
+[ 89% ]TIME: 0, ERR: 106.33 // SEED: 42, N: 8
+
+[SUCCESS] BF Answer: 983.29 <-> MST Answer: 1253.00
+[ 72% ]TIME: 0, ERR: 269.70 // SEED: 42, N: 9
+
+[SUCCESS] BF Answer: 1020.46 <-> MST Answer: 1354.04
+[ 67% ]TIME: 0, ERR: 333.57 // SEED: 42, N: 10
+
+[SUCCESS] BF Answer: 1033.78 <-> MST Answer: 1377.95
+[ 66% ]TIME: 1, ERR: 344.17 // SEED: 42, N: 11
+
+[SUCCESS] BF Answer: 1037.50 <-> MST Answer: 1375.03
+[ 67% ]TIME: 15, ERR: 337.53 // SEED: 42, N: 12
+
+============Testing summary============
+=       11               tests passed =
+=        0               tests failed =
+=       11                tests total =
+=       17                   ttl time =
+=    1.545                   avg time =
+=  765.395              AVG BF answer =
+=  910.376             AVG MST answer =
+=    3.630         Standard deviation =
+=    0.036   Normalized st. deviation =
+----------Testing  successful----------

@@ -4,15 +4,21 @@
 
 #include "../include/checker.h"
 
-TestResults::TestResults(bool success, time_t time, double error):
+TestResults::TestResults(bool success,
+                         time_t time,
+                         double ansBF,
+                         double ansMST,
+                         double error):
     success(success),
     time(time),
-    error(error){}
+    ansBF(ansBF),
+    ansMST(ansMST),
+    error(error) {}
 
 
 
-TestResults && runTests(vector<unsigned> seeds,
-                        vector<unsigned> ns,
+TestResults && runTests(const vector<unsigned> & seeds,
+                        const vector<unsigned> & ns,
                         double criteria)
 {
     // Number of successful tests
@@ -21,8 +27,12 @@ TestResults && runTests(vector<unsigned> seeds,
     unsigned f = 0;
     // Total time
     time_t timer = 0;
-    // Maximal error
-    double maxErr = 0;
+    // Avg MST answer
+    double avgMST = 0;
+    // Avg BF answer
+    double avgBF = 0;
+    // Standard deviation
+    double stDeviation = 0;
     // Running test for every seed and number of dots
     for(unsigned seed : seeds){
         for(unsigned n : ns) {
@@ -32,26 +42,33 @@ TestResults && runTests(vector<unsigned> seeds,
             else
                 f++;
             timer += results.time;
-            if(results.error > maxErr)
-                maxErr = results.error;
+            avgMST += results.ansMST;
+            avgBF += results.ansBF;
+            stDeviation += results.error;
         }
     }
+    avgMST /= f + s;
+    avgBF /= f + s;
+    stDeviation = sqrt(stDeviation) / (f + s);
     // Printing summary
-    cout << "====Testing summary====\n= "
-         << setw(7) << s << " tests passed=\n= "
-         << setw(7) << f << " tests failed=\n= "
-         << setw(7) << s + f << " tests total =\n= "
-         << setw(7) << timer + 1 << " s ttl time  =\n= "
-         << setw(7) << std::fixed << setprecision(3)
-         << (float)(timer + 1) / (s + f) << " s avg time  =\n= "
-         << setw(7) << maxErr << " % max error =\n";
+    cout << setw(42) <<"============Testing summary============\n= "
+         << setw(8) << s << setw(32) << " tests passed =\n= "
+         << setw(8) << f << setw(32) << " tests failed =\n= "
+         << setw(8) << s + f << setw(32) << " tests total =\n= "
+         << setw(8) << timer + 1 << setw(32) << " ttl time =\n= "
+         << setw(8) << std::fixed << setprecision(3)
+         << (float)(timer + 1) / (s + f) << setw(32) << " avg time =\n= "
+         << setw(8) << avgBF << setw(32) << " AVG BF answer =\n= "
+         << setw(8) << avgMST << setw(32) << " AVG MST answer =\n= "
+         << setw(8) << stDeviation << setw(32) << "  Standard deviation =\n= "
+         << setw(8) << stDeviation / 100 << setw(30) << "Normalized st. deviation =\n";
 
     if (f == 0)
-        cout << "--Testing  successful--\n";
+        cout << setw(40) << "----------Testing  successful----------\n";
     else
-        cout << "----Testing  failed----\n";
+        cout << setw(40) << "------------Testing  failed------------\n";
 
-    return move(TestResults(f == 0, timer, maxErr));
+    return move(TestResults(f == 0, timer, avgBF, avgMST, stDeviation));
 }
 
 
@@ -68,6 +85,31 @@ TestResults && runTests(unsigned maxSeed,
         ns.push_back(i);
     return runTests(seeds, ns, criteria);
 }
+
+
+
+TestResults && runTests(const vector<unsigned> & seeds,
+                        unsigned maxN,
+                        double criteria)
+{
+    vector<unsigned> ns;
+    for(unsigned i = 2; i <= maxN; i++)
+        ns.push_back(i);
+    return runTests(seeds, ns, criteria);
+}
+
+
+
+TestResults && runTests(unsigned maxSeed,
+                        const vector<unsigned> & ns,
+                        double criteria)
+{
+    vector<unsigned> seeds;
+    for(unsigned i = 0; i <= maxSeed; i++)
+        seeds.push_back(i);
+    return runTests(seeds, ns, criteria);
+}
+
 
 
 
@@ -95,10 +137,10 @@ TestResults && runTest(unsigned seed, unsigned n, double criteria)
          << " BF Answer: " << bf << " <-> MST Answer: " << mst
          << "\n[ " << (int)((100 - err >= 0)?(100 - err):(0)) << "% ]"
          << "TIME: " << timer
-         << ", ERR: " << (int)(fabs(mst - bf)/bf * 100) << "%"
+         << ", ERR: " << fabs(mst - bf)
          << " // SEED: " << seed
          << ", N: " << n << "\n\n";
 
     return move(TestResults(1 <= mst / bf && mst / bf <= criteria,
-            timer, (fabs(mst - bf)/bf * 100)));
+                            timer, bf, mst, fabs(mst - bf)));
 }
