@@ -1,1 +1,0 @@
-/usr/bin/c++   -g   CMakeFiles/2.dir/src/main.cpp.o CMakeFiles/2.dir/src/graph.cpp.o CMakeFiles/2.dir/src/MST.cpp.o CMakeFiles/2.dir/src/dots.cpp.o CMakeFiles/2.dir/src/TSP_BF.cpp.o CMakeFiles/2.dir/src/TSP_MST.cpp.o CMakeFiles/2.dir/src/checker.cpp.o  -o 2 

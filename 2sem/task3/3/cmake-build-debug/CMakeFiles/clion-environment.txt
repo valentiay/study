@@ -1,2 +1,0 @@
-Options: 
-CMake: 3.7.1@/home/valentiay/clion-2017.1.1/bin/cmake/bin/cmake

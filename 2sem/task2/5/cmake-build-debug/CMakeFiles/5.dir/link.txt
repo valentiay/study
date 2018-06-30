@@ -1,1 +1,0 @@
-/usr/bin/c++   -g   CMakeFiles/5.dir/main.cpp.o  -o 5 

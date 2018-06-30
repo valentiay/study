@@ -1,1 +1,0 @@
-/usr/bin/c++    -std=c++11 -g   CMakeFiles/3.dir/main.cpp.o  -o 3 
