@@ -2,8 +2,6 @@
 
 АКОС: https://github.com/valentiay/caos
 
-4 семестр: https://github.com/valentiay/tpcc
-
 Путь к решению (SEM)sem/task(MODULE)/TASK
 * SEM - семестр
 * MODULE - модуль
