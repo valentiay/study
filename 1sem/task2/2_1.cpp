@@ -43,9 +43,12 @@ struct Customer{
 //=============================================================================
 
 void increase(Customer * arr, int n, int start, int adTime){
-    for(int i = start; i < n; i++)
+    for(int i = start; i < n; i++){
         if(arr[i].beg <= adTime)
             arr[i].ads++;
+        else
+            break;
+    }
 }
 
 //=============================================================================
